@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Live Resource Map</title>
+    <meta name="description" content="Real-time map of hospital resources, ambulance positions, and emergency capacity across the network.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        body { background: #0f172a; }
+
+        .map-shell {
+            min-height: 100vh; display: flex; flex-direction: column;
+            background: #0f172a;
+        }
+
+        /* ── Topbar ── */
+        .map-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .map-topbar .back-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.08); color: white;
+            display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+        }
+        .map-topbar .bar-center {
+            font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700; color: white;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .live-pill {
+            background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+            color: #f87171; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+            padding: 2px 8px; border-radius: 20px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .live-pill-dot { width: 5px; height: 5px; border-radius: 50%; background: #f87171; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* ── Filter Bar ── */
+        .filter-bar {
+            display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-chip {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8; border-radius: 20px; padding: 6px 14px;
+            font-size: 0.78rem; white-space: nowrap; cursor: pointer;
+            transition: all 0.2s; font-family: 'Inter', sans-serif;
+        }
+        .filter-chip.active { background: rgba(37,99,235,0.25); border-color: rgba(37,99,235,0.5); color: #60a5fa; }
+        .filter-chip:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* ── Map Canvas ── */
+        .map-area {
+            position: relative; width: 100%;
+            height: 320px; overflow: hidden;
+            background: linear-gradient(180deg, #0d2035 0%, #0a1628 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .map-canvas { width: 100%; height: 100%; }
+
+        /* ── Map Legend ── */
+        .map-legend {
+            position: absolute; bottom: 12px; left: 12px;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            padding: 10px 14px; display: flex; gap: 14px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94a3b8; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        .map-scale {
+            position: absolute; bottom: 12px; right: 12px;
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px; padding: 4px 10px; font-size: 0.65rem; color: #64748b;
+        }
+
+        /* ── Stats Strip ── */
+        .stats-strip {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1px; background: rgba(255,255,255,0.06);
+        }
+        .stat-cell {
+            background: #0f172a; padding: 14px 10px; text-align: center;
+        }
+        .stat-cell .val { font-size: 1.4rem; font-weight: 800; color: white; line-height: 1; }
+        .stat-cell .lbl { font-size: 0.65rem; color: #475569; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .val-green { color: #4ade80 !important; }
+        .val-red { color: #f87171 !important; }
+        .val-amber { color: #fbbf24 !important; }
+
+        /* ── Hospital List ── */
+        .hosp-list { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .hosp-card {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 16px; cursor: pointer;
+            transition: all 0.25s;
+        }
+        .hosp-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(37,99,235,0.3); }
+        .hosp-card.expanded { border-color: rgba(37,99,235,0.4); }
+        .hosp-head { display: flex; align-items: center; gap: 12px; }
+        .hosp-status-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .dot-available { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+        .dot-moderate { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+        .dot-critical { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.15); animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red { 0%,100%{box-shadow:0 0 0 3px rgba(239,68,68,0.15)} 50%{box-shadow:0 0 0 6px rgba(239,68,68,0.08)} }
+        .hosp-name { font-weight: 700; color: white; font-size: 0.9rem; }
+        .hosp-area { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+        .hosp-head-right { margin-left: auto; text-align: right; }
+        .wait-time { font-size: 0.75rem; color: #94a3b8; }
+        .wait-val { font-size: 1.1rem; font-weight: 800; color: white; }
+
+        /* Resource bars */
+        .resource-bars { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+        .res-row { display: flex; align-items: center; gap: 10px; }
+        .res-label { font-size: 0.72rem; color: #64748b; width: 60px; flex-shrink: 0; }
+        .res-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+        .res-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+        .fill-green { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .fill-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .fill-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .res-pct { font-size: 0.72rem; color: #94a3b8; width: 32px; text-align: right; }
+
+        .hosp-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .specialty-chip {
+            background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+            color: #a5b4fc; border-radius: 6px; padding: 3px 8px; font-size: 0.7rem;
+        }
+        .hosp-actions { display: flex; gap: 8px; margin-top: 12px; }
+        .action-btn-sm {
+            flex: 1; padding: 8px; border-radius: 8px; font-size: 0.78rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-call-sm { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+        .btn-nav-sm { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); color: #60a5fa; }
+        .btn-er-sm { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+        .action-btn-sm:hover { filter: brightness(1.2); transform: translateY(-1px); }
+
+        .section-title {
+            padding: 8px 16px 4px;
+            font-size: 0.7rem; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="map-shell">
+
+    <!-- Topbar -->
+    <div class="map-topbar">
+        <a href="#" onclick="history.back(); return false;" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="bar-center">
+            <i class="fas fa-map-marker-alt" style="color:#2563eb"></i>
+            Live Resource Map
+            <span class="live-pill"><span class="live-pill-dot"></span>LIVE</span>
+        </div>
+        <div style="width:36px"></div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <button class="filter-chip active" onclick="setFilter('all', this)">All Hospitals</button>
+        <button class="filter-chip" onclick="setFilter('available', this)">✅ Available</button>
+        <button class="filter-chip" onclick="setFilter('moderate', this)">⚠️ Moderate</button>
+        <button class="filter-chip" onclick="setFilter('critical', this)">🔴 Critical</button>
+        <button class="filter-chip" onclick="setFilter('icu', this)">🏥 ICU Available</button>
+        <button class="filter-chip" onclick="setFilter('ambulance', this)">🚑 Amb. Available</button>
+    </div>
+
+    <!-- Map Canvas -->
+    <div class="map-area">
+        <canvas class="map-canvas" id="map-canvas"></canvas>
+        <div class="map-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Available</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Moderate</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Critical</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Ambulance</div>
+        </div>
+        <div class="map-scale">~ 5 km radius · Noida/NCR</div>
+    </div>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip">
+        <div class="stat-cell">
+            <div class="val val-green" id="stat-avail">0</div>
+            <div class="lbl">Available</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val val-amber" id="stat-beds">0</div>
+            <div class="lbl">Free Beds</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val val-red" id="stat-icu">0</div>
+            <div class="lbl">Free ICU</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val" id="stat-amb">0</div>
+            <div class="lbl">Ambulances</div>
+        </div>
+    </div>
+
+    <!-- Hospital List -->
+    <div class="section-title">Network Hospitals</div>
+    <div class="hosp-list" id="hosp-list"></div>
+
+</div>
+
+<script src="auth.js"></script>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script>
+    let currentFilter = 'all';
+    let animFrame;
+
+    // ── Map Rendering ─────────────────────────────────────────────────────────
+    const canvas = document.getElementById('map-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Coordinate mapping (lat/lng to canvas pixels)
+    const MAP_BOUNDS = { minLat: 28.45, maxLat: 28.66, minLng: 77.28, maxLng: 77.56 };
+
+    function latLngToXY(lat, lng) {
+        const x = ((lng - MAP_BOUNDS.minLng) / (MAP_BOUNDS.maxLng - MAP_BOUNDS.minLng)) * canvas.width;
+        const y = (1 - (lat - MAP_BOUNDS.minLat) / (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat)) * canvas.height;
+        return { x, y };
+    }
+
+    // Ambulance animation state
+    const ambulancePositions = HealthAIData.ambulances.map(a => ({
+        ...a, animLat: a.lat, animLng: a.lng,
+        targetLat: a.lat + (Math.random() - 0.5) * 0.02,
+        targetLng: a.lng + (Math.random() - 0.5) * 0.02,
+    }));
+
+    function drawMap() {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        // Dark map background
+        ctx.fillStyle = '#0a1628';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw "road" grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 12; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * canvas.width / 12, 0);
+            ctx.lineTo(i * canvas.width / 12, canvas.height);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, i * canvas.height / 12);
+            ctx.lineTo(canvas.width, i * canvas.height / 12);
+            ctx.stroke();
+        }
+
+        // Hospitals
+        HealthAIData.hospitals.forEach(h => {
+            const pos = latLngToXY(h.lat, h.lng);
+            const color = h.status === 'available' ? '#22c55e' : h.status === 'moderate' ? '#f59e0b' : '#ef4444';
+
+            // Pulse ring
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 22, 0, Math.PI * 2);
+            ctx.fillStyle = color + '18';
+            ctx.fill();
+
+            // Outer ring
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 16, 0, Math.PI * 2);
+            ctx.fillStyle = color + '30';
+            ctx.fill();
+
+            // Inner dot
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 9, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // Hospital cross
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(pos.x - 4, pos.y - 1.5, 8, 3);
+            ctx.fillRect(pos.x - 1.5, pos.y - 4, 3, 8);
+
+            // Name label
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.font = '9px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(h.name.split(' ')[0], pos.x, pos.y + 22);
+        });
+
+        // Ambulances
+        ambulancePositions.forEach(a => {
+            const pos = latLngToXY(a.animLat, a.animLng);
+            const color = a.status === 'available' ? '#3b82f6' : '#f59e0b';
+
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = color + '30';
+            ctx.fill();
+
+            ctx.fillStyle = '#fff';
+            ctx.font = '8px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🚑', pos.x, pos.y + 3);
+        });
+    }
+
+    // Slowly move ambulances
+    function animateAmbulances() {
+        ambulancePositions.forEach(a => {
+            a.animLat += (a.targetLat - a.animLat) * 0.01;
+            a.animLng += (a.targetLng - a.animLng) * 0.01;
+
+            // Occasionally set a new target
+            if (Math.random() < 0.002) {
+                a.targetLat = a.lat + (Math.random() - 0.5) * 0.03;
+                a.targetLng = a.lng + (Math.random() - 0.5) * 0.03;
+            }
+        });
+
+        drawMap();
+        animFrame = requestAnimationFrame(animateAmbulances);
+    }
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+    function updateStats() {
+        const avail = HealthAIData.hospitals.filter(h => h.status === 'available').length;
+        const freeBeds = HealthAIData.getTotalBeds() - HealthAIData.getTotalOccupied();
+        const freeICU = HealthAIData.getTotalICU() - HealthAIData.getOccupiedICU();
+        const ambFree = HealthAIData.ambulances.filter(a => a.status === 'available').length;
+
+        document.getElementById('stat-avail').textContent = avail;
+        document.getElementById('stat-beds').textContent = freeBeds;
+        document.getElementById('stat-icu').textContent = freeICU;
+        document.getElementById('stat-amb').textContent = ambFree;
+    }
+
+    // ── Hospital Cards ─────────────────────────────────────────────────────────
+    function setFilter(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        renderHospList();
+    }
+
+    function getFilteredHospitals() {
+        return HealthAIData.hospitals.filter(h => {
+            if (currentFilter === 'all') return true;
+            if (currentFilter === 'available') return h.status === 'available';
+            if (currentFilter === 'moderate') return h.status === 'moderate';
+            if (currentFilter === 'critical') return h.status === 'critical';
+            if (currentFilter === 'icu') return (h.totalICU - h.occupiedICU) > 0;
+            if (currentFilter === 'ambulance') return (h.ambulances.available) > 0;
+            return true;
+        });
+    }
+
+    function getFillClass(pct) {
+        if (pct < 60) return 'fill-green';
+        if (pct < 85) return 'fill-amber';
+        return 'fill-red';
+    }
+
+    function renderHospList() {
+        const list = document.getElementById('hosp-list');
+        const hospitals = getFilteredHospitals();
+
+        list.innerHTML = hospitals.map(h => {
+            const bedPct = HealthAIData.getOccupancyPct(h);
+            const icuPct = HealthAIData.getICUPct(h);
+            const ventPct = Math.round((h.occupiedVentilators / h.totalVentilators) * 100);
+            const dotClass = `dot-${h.status}`;
+            const freeBeds = h.totalBeds - h.occupiedBeds;
+            const freeICU = h.totalICU - h.occupiedICU;
+
+            return `
+            <div class="hosp-card" id="hc-${h.id}" onclick="toggleCard('${h.id}')">
+                <div class="hosp-head">
+                    <div class="hosp-status-dot ${dotClass}"></div>
+                    <div>
+                        <div class="hosp-name">${h.name}</div>
+                        <div class="hosp-area"><i class="fas fa-map-marker-alt" style="color:#475569;font-size:0.65rem"></i> ${h.area}</div>
+                    </div>
+                    <div class="hosp-head-right">
+                        <div class="wait-val">${h.emergencyWait}m</div>
+                        <div class="wait-time">ER wait</div>
+                    </div>
+                </div>
+
+                <div class="resource-bars">
+                    <div class="res-row">
+                        <div class="res-label">Beds</div>
+                        <div class="res-bar-wrap"><div class="res-bar-fill ${getFillClass(bedPct)}" style="width:${bedPct}%"></div></div>
+                        <div class="res-pct">${freeBeds} free</div>
+                    </div>
+                    <div class="res-row">
+                        <div class="res-label">ICU</div>
+                        <div class="res-bar-wrap"><div class="res-bar-fill ${getFillClass(icuPct)}" style="width:${icuPct}%"></div></div>
+                        <div class="res-pct">${freeICU}</div>
+                    </div>
+                    <div class="res-row">
+                        <div class="res-label">Ventilator</div>
+                        <div class="res-bar-wrap"><div class="res-bar-fill ${getFillClass(ventPct)}" style="width:${ventPct}%"></div></div>
+                        <div class="res-pct">${h.totalVentilators - h.occupiedVentilators}</div>
+                    </div>
+                </div>
+
+                <div class="hosp-chips">
+                    ${h.specialties.map(s => `<span class="specialty-chip">${s}</span>`).join('')}
+                    <span class="specialty-chip" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#4ade80">
+                        <i class="fas fa-star" style="font-size:0.6rem"></i> ${h.rating}
+                    </span>
+                </div>
+
+                <div class="hosp-actions">
+                    <button class="action-btn-sm btn-call-sm" onclick="event.stopPropagation(); window.location.href='tel:${h.contact}'">
+                        <i class="fas fa-phone"></i> Call
+                    </button>
+                    <button class="action-btn-sm btn-er-sm" onclick="event.stopPropagation(); window.location.href='emergency.html'">
+                        <i class="fas fa-ambulance"></i> Emergency
+                    </button>
+                    <button class="action-btn-sm btn-nav-sm" onclick="event.stopPropagation()">
+                        <i class="fas fa-directions"></i> Navigate
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+
+        if (hospitals.length === 0) {
+            list.innerHTML = `<div style="text-align:center;padding:40px;color:#475569">
+                <i class="fas fa-hospital-alt" style="font-size:2rem;margin-bottom:10px"></i>
+                <p>No hospitals match this filter</p>
+            </div>`;
+        }
+    }
+
+    function toggleCard(id) { /* cards always expanded now */ }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    window.addEventListener('load', () => {
+        HealthAIAuth.guardPage([]); // Allow any logged-in role
+        updateStats();
+        renderHospList();
+        animateAmbulances();
+
+        // Live data updates
+        HealthAIData.startSimulation(8000);
+        window.addEventListener('healthai-data-updated', () => {
+            updateStats();
+            renderHospList();
+        });
+    });
+
+    window.addEventListener('resize', drawMap);
+</script>
+</body>
+</html>

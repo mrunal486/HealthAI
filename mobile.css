@@ -1,0 +1,201 @@
+/* =============================================
+   HealthAI — Mobile-First Shared Overrides
+   Fixes mixed-layout pages for all screen sizes
+   ============================================= */
+
+/* ── Mobile Hamburger Button (inside sidebar dashboards) ── */
+.mob-hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary, #1E293B);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 6px 10px 6px 0;
+    margin-right: 8px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+.mob-hamburger-btn:hover { color: var(--primary, #2563EB); }
+
+/* ── Sidebar Overlay (mobile) ── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ── Nav User Chip (landing page) ── */
+.nav-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+    padding: 5px 10px 5px 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+}
+.nav-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+.nav-logout-btn {
+    background: rgba(255,255,255,0.1) !important;
+    border: none !important;
+    color: rgba(255,255,255,0.7) !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    cursor: pointer;
+    font-size: 0.75rem !important;
+    transition: background 0.2s, color 0.2s;
+}
+.nav-logout-btn:hover { background: rgba(239,68,68,0.3) !important; color: #fff !important; }
+
+/* ── Mobile Sidebar Drawer behavior ── */
+@media (max-width: 768px) {
+    /* Sidebar becomes a fixed off-canvas drawer */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100dvh !important;
+        z-index: 300 !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
+        box-shadow: none !important;
+        width: 260px !important;
+    }
+    .sidebar.mobile-open {
+        transform: translateX(0) !important;
+        box-shadow: 8px 0 40px rgba(0,0,0,0.25) !important;
+    }
+
+    /* Main content takes full width */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .dashboard-layout {
+        flex-direction: column !important;
+    }
+
+    /* Show hamburger */
+    .mob-hamburger-btn { display: inline-flex !important; }
+
+    /* Topbar adjustments */
+    .topbar {
+        padding: 12px 16px !important;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0;
+    }
+    .topbar-left h2 { font-size: 1.1rem !important; }
+    .topbar-left p  { font-size: 0.72rem !important; }
+
+    .topbar-right {
+        gap: 6px !important;
+        flex-wrap: wrap;
+    }
+    .topbar-right .btn { font-size: 0.75rem !important; padding: 6px 10px !important; }
+
+    /* Metrics grid: 2 columns on mobile */
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .metric-card { padding: 14px 12px !important; }
+    .metric-value { font-size: 1.5rem !important; }
+
+    /* Two-column grid → single column */
+    .dash-grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    /* Page content padding */
+    .page-content { padding: 16px !important; }
+
+    /* Table → scrollable on mobile */
+    .table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+    .data-table { min-width: 600px; }
+
+    /* Admin dashboard sidebar tweak */
+    .admin-layout > .sidebar,
+    [class*="dash"] > .sidebar {
+        width: 260px !important;
+    }
+
+    /* Doctor status card */
+    .doctor-status-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 14px !important;
+    }
+    .doc-stats { gap: 16px !important; }
+
+    /* Schedule grid spacing */
+    .schedule-grid { gap: 10px !important; }
+    .appointment-card { padding: 12px !important; }
+}
+
+@media (max-width: 480px) {
+    /* 1 column metrics on very small screens */
+    .metrics-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .topbar-right .btn-outline { display: none; } /* Hide back button on tiny screens */
+}
+
+/* ── Sidebar logout item (injected by auth.js) ── */
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: calc(100% - 24px);
+    margin: 8px 12px 12px;
+    padding: 10px 14px;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    color: #FCA5A5;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+.sidebar-logout-btn:hover {
+    background: rgba(239,68,68,0.2);
+    color: #FEE2E2;
+}
+.sidebar-logout-btn i { font-size: 0.9rem; }
+
+/* ── Landing page nav logged-in state ── */
+#nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

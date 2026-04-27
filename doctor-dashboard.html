@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Doctor Dashboard</title>
+    <meta name="description" content="Doctor dashboard for managing appointments, emergencies, and patient queues.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="coming-soon.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon-sm"><i class="fas fa-heartbeat"></i></div>
+                <div class="brand-text">
+                    <h3>HealthAI</h3>
+                    <p>Doctor Portal</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <span class="nav-section-label">My Dashboard</span>
+                <a href="#" class="sidebar-link coming-soon active" id="sl-today"><i class="fas fa-calendar-day"></i> Today's
+                    Schedule</a>
+                <a href="#" class="sidebar-link coming-soon" id="sl-alerts"><i class="fas fa-bolt"></i> Emergency Alerts <span
+                        class="badge-count">2</span></a>
+                <a href="#" class="sidebar-link coming-soon" id="sl-queue"><i class="fas fa-list-ol"></i> Patient Queue</a>
+                <span class="nav-section-label">Clinical</span>
+                <a href="#" class="sidebar-link coming-soon" id="sl-patients"><i class="fas fa-user-injured"></i> My Patients</a>
+                <a href="#" class="sidebar-link coming-soon" id="sl-records"><i class="fas fa-file-medical"></i> Records</a>
+                <span class="nav-section-label">Hospital</span>
+                <a href="hospital-dashboard.html" class="sidebar-link" id="sl-hosp"><i class="fas fa-hospital"></i>
+                    Hospital Dashboard</a>
+                <a href="resources.html" class="sidebar-link" id="sl-res"><i class="fas fa-boxes"></i> Resources</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background:linear-gradient(135deg,#14B8A6,#0D9488)" data-auth-avatar>RS</div>
+                    <div class="user-info">
+                        <h4 data-auth-name>Dr. Rajesh Sharma</h4>
+                        <p data-auth-role>Cardiologist · ID #DOC-1042</p>
+                    </div>
+                </div>
+                <button class="sidebar-logout-btn" onclick="HealthAIAuth.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h2>Doctor Dashboard</h2>
+                    <p>Sunday, 26 April 2026 · City General Hospital</p>
+                </div>
+                <div class="topbar-right">
+                    <div class="status-toggle" id="status-toggle">
+                        <span class="status-dot available"></span>
+                        <span id="status-text">Available</span>
+                        <button class="btn btn-sm" id="toggle-status-btn" onclick="toggleStatus()"
+                            style="background:var(--success-bg);color:var(--success);border:none">Toggle</button>
+                    </div>
+                    <button class="icon-btn alert-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <div class="notif-dot"></div>
+                    </button>
+                    <a href="index.html" class="btn btn-outline btn-sm">← Home</a>
+                </div>
+            </div>
+
+            <div class="page-content" style="position:relative;">
+                <!-- Full Page Coming Soon Overlay -->
+                <div class="coming-soon" style="position:absolute; inset:0; z-index:50; cursor:pointer;" title="Coming Soon"></div>
+                <!-- DOCTOR PROFILE CARD -->
+                <div class="doctor-status-card">
+                    <div class="doc-avatar-lg">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="doc-status-info">
+                        <h2>Dr. Rajesh Sharma</h2>
+                        <p>Cardiologist · MBBS, MD · 12 Years Experience</p>
+                        <div class="doc-status-badge available" id="doc-status-badge">
+                            <span class="status-dot available" style="width:7px;height:7px"></span>
+                            Available for Patients
+                        </div>
+                    </div>
+                    <div class="doc-stats">
+                        <div class="doc-stat-item">
+                            <span class="doc-stat-val">8</span>
+                            <span class="doc-stat-lbl">Today's Appts</span>
+                        </div>
+                        <div class="doc-stat-item">
+                            <span class="doc-stat-val">3</span>
+                            <span class="doc-stat-lbl">Completed</span>
+                        </div>
+                        <div class="doc-stat-item">
+                            <span class="doc-stat-val">2</span>
+                            <span class="doc-stat-lbl">Alerts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-grid-2">
+
+                    <!-- TODAY'S SCHEDULE -->
+                    <div class="dash-card">
+                        <div class="section-head">
+                            <div>
+                                <h3>Today's Schedule</h3>
+                                <p>Sunday, 26 Apr 2026</p>
+                            </div>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Slot</button>
+                        </div>
+
+                        <div class="schedule-grid">
+
+                            <div class="appointment-card" style="border-left:3px solid var(--success)">
+                                <div class="appt-time">
+                                    <span class="time-val">09:00</span>
+                                    <span class="time-period">AM</span>
+                                </div>
+                                <div class="appt-divider"></div>
+                                <div class="appt-info">
+                                    <h4>Ramesh Singh</h4>
+                                    <p>Follow-up · Cardiac Monitoring</p>
+                                    <div class="appt-tag">
+                                        <span class="status-dot available"></span>
+                                        Completed <span class="badge badge-success" style="margin-left:4px">Done</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="appointment-card" style="border-left:3px solid var(--success)">
+                                <div class="appt-time">
+                                    <span class="time-val">10:30</span>
+                                    <span class="time-period">AM</span>
+                                </div>
+                                <div class="appt-divider"></div>
+                                <div class="appt-info">
+                                    <h4>Sunita Gupta</h4>
+                                    <p>Consultation · ECG Review</p>
+                                    <div class="appt-tag">
+                                        <span class="status-dot available"></span>
+                                        Completed <span class="badge badge-success" style="margin-left:4px">Done</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="appointment-card" style="border-left:3px solid var(--primary)">
+                                <div class="appt-time">
+                                    <span class="time-val">12:00</span>
+                                    <span class="time-period">PM</span>
+                                </div>
+                                <div class="appt-divider"></div>
+                                <div class="appt-info">
+                                    <h4>Kiran Joshi</h4>
+                                    <p>New Patient · Chest Pain</p>
+                                    <div class="appt-tag">
+                                        <span class="status-dot busy"></span>
+                                        In Progress <span class="badge badge-info" style="margin-left:4px">Now</span>
+                                    </div>
+                                </div>
+                                <div class="appt-status">
+                                    <button class="btn btn-primary btn-sm">Start</button>
+                                </div>
+                            </div>
+
+                            <div class="appointment-card">
+                                <div class="appt-time">
+                                    <span class="time-val">02:00</span>
+                                    <span class="time-period">PM</span>
+                                </div>
+                                <div class="appt-divider"></div>
+                                <div class="appt-info">
+                                    <h4>Arun Nair</h4>
+                                    <p>Post-Op · Heart Surgery Follow-up</p>
+                                    <div class="appt-tag">
+                                        <i class="fas fa-clock"></i> Scheduled
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="appointment-card">
+                                <div class="appt-time">
+                                    <span class="time-val">03:30</span>
+                                    <span class="time-period">PM</span>
+                                </div>
+                                <div class="appt-divider"></div>
+                                <div class="appt-info">
+                                    <h4>Meena Verma</h4>
+                                    <p>Consultation · Arrhythmia</p>
+                                    <div class="appt-tag">
+                                        <i class="fas fa-clock"></i> Scheduled
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div style="display:flex;flex-direction:column;gap:24px">
+
+                        <!-- EMERGENCY ALERTS -->
+                        <div class="dash-card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Emergency Alerts</h3>
+                                    <p>Requires immediate attention</p>
+                                </div>
+                                <span class="live-badge"><span class="live-pulse"></span>LIVE</span>
+                            </div>
+
+                            <div class="emergency-alert-item" id="ea-1">
+                                <div class="ea-icon"><i class="fas fa-heartbeat"></i></div>
+                                <div class="ea-info">
+                                    <h4>Rahul Mehta — Cardiac Arrest</h4>
+                                    <p>ETA: 3 min · ICU Room 4 pre-assigned</p>
+                                </div>
+                                <div class="ea-action">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="acknowledgeAlert('ea-1')">Respond</button>
+                                </div>
+                            </div>
+
+                            <div class="emergency-alert-item" id="ea-2">
+                                <div class="ea-icon"><i class="fas fa-brain"></i></div>
+                                <div class="ea-info">
+                                    <h4>Suresh Kumar — Stroke</h4>
+                                    <p>ETA: 12 min · Emergency Room</p>
+                                </div>
+                                <div class="ea-action">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="acknowledgeAlert('ea-2')">Respond</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PATIENT QUEUE -->
+                        <div class="dash-card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Patient Queue</h3>
+                                    <p>Waiting for consultation</p>
+                                </div>
+                                <span class="badge badge-info">5 Waiting</span>
+                            </div>
+
+                            <div class="queue-item">
+                                <div class="queue-num urgent">1</div>
+                                <div class="queue-info">
+                                    <h4>Rahul Mehta</h4>
+                                    <p>Emergency · Cardiac · High Priority</p>
+                                </div>
+                                <span class="badge badge-danger">Urgent</span>
+                            </div>
+
+                            <div class="queue-item">
+                                <div class="queue-num" style="background:var(--primary-bg);color:var(--primary)">2</div>
+                                <div class="queue-info">
+                                    <h4>Kiran Joshi</h4>
+                                    <p>Chest Pain · In Progress</p>
+                                </div>
+                                <span class="badge badge-info">Now</span>
+                            </div>
+
+                            <div class="queue-item">
+                                <div class="queue-num">3</div>
+                                <div class="queue-info">
+                                    <h4>Arun Nair</h4>
+                                    <p>Post-Op Follow-up</p>
+                                </div>
+                                <span class="badge badge-warning">2:00 PM</span>
+                            </div>
+
+                            <div class="queue-item">
+                                <div class="queue-num">4</div>
+                                <div class="queue-info">
+                                    <h4>Meena Verma</h4>
+                                    <p>Arrhythmia Consultation</p>
+                                </div>
+                                <span class="badge badge-warning">3:30 PM</span>
+                            </div>
+
+                            <div class="queue-item">
+                                <div class="queue-num">5</div>
+                                <div class="queue-info">
+                                    <h4>Deepak Rao</h4>
+                                    <p>Routine Cardiac Check</p>
+                                </div>
+                                <span class="badge badge-warning">5:00 PM</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="coming-soon.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.guardPage(['doctor', 'admin']);
+            HealthAIAuth.injectUserUI();
+            HealthAIAuth.initMobileSidebar();
+        });
+
+        let isAvailable = true;
+
+        function toggleStatus() {
+            isAvailable = !isAvailable;
+            const badge = document.getElementById('doc-status-badge');
+            const dot = document.querySelector('#status-toggle .status-dot');
+            const text = document.getElementById('status-text');
+
+            if (isAvailable) {
+                badge.className = 'doc-status-badge available';
+                badge.innerHTML = '<span class="status-dot available" style="width:7px;height:7px"></span> Available for Patients';
+                dot.className = 'status-dot available';
+                text.textContent = 'Available';
+            } else {
+                badge.className = 'doc-status-badge busy';
+                badge.innerHTML = '<span class="status-dot busy" style="width:7px;height:7px"></span> Currently Busy';
+                dot.className = 'status-dot busy';
+                text.textContent = 'Busy';
+            }
+        }
+
+        function acknowledgeAlert(id) {
+            const el = document.getElementById(id);
+            el.style.opacity = '0.5';
+            el.querySelector('.ea-action button').textContent = 'Acknowledged';
+            el.querySelector('.ea-action button').disabled = true;
+        }
+    </script>
+</body>
+
+</html>

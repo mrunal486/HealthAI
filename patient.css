@@ -1,0 +1,661 @@
+/* ============================
+   PATIENT APP STYLES
+   ============================ */
+
+body.patient-app {
+    background: #F8FAFC;
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+}
+
+/* TOP BAR */
+.app-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.back-btn:hover {
+    background: var(--primary-bg);
+    color: var(--primary);
+}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    animation: live-anim 1.5s infinite;
+}
+
+.app-icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.app-icon-btn:hover {
+    color: var(--primary);
+}
+
+/* MAIN */
+.app-main {
+    padding: 20px;
+    padding-bottom: 90px;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px - 70px);
+}
+
+/* GREETING */
+.greeting-section {
+    margin-bottom: 20px;
+}
+
+.greeting-text {
+    margin-bottom: 14px;
+}
+
+.greeting-text h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.greeting-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.wave {
+    display: inline-block;
+    animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: rotate(0)
+    }
+
+    25% {
+        transform: rotate(20deg)
+    }
+
+    75% {
+        transform: rotate(-10deg)
+    }
+}
+
+/* SEARCH BAR */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 10px 16px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.search-bar:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-bar i {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-filter-btn {
+    background: var(--primary-bg);
+    border: none;
+    color: var(--primary);
+    padding: 6px 10px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-filter-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* EMERGENCY SECTION */
+.emergency-section {
+    margin-bottom: 24px;
+}
+
+.emergency-card {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2d1b1b 100%);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+}
+
+.emergency-bg-anim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(239, 68, 68, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.emergency-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 1;
+}
+
+.emergency-icon-wrap {
+    width: 44px;
+    height: 44px;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FCA5A5;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.emergency-text h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.emergency-text p {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin-top: 3px;
+    max-width: 140px;
+    line-height: 1.4;
+}
+
+/* SOS BUTTON */
+.sos-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    z-index: 1;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sos-ring {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    border-radius: 50%;
+    animation: sos-pulse 2s ease-out infinite;
+}
+
+.sos-ring.delay {
+    animation-delay: 1s;
+}
+
+@keyframes sos-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.sos-inner {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 2px;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5);
+    transition: transform 0.2s;
+    z-index: 2;
+}
+
+.sos-btn:hover .sos-inner {
+    transform: scale(1.08);
+}
+
+.sos-inner i {
+    font-size: 1.1rem;
+}
+
+.sos-inner span {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* QUICK ACTIONS */
+.quick-actions {
+    margin-bottom: 24px;
+}
+
+.qa-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.qa-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.qa-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.qa-item:hover {
+    transform: translateY(-3px);
+}
+
+.qa-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: var(--primary-bg);
+    color: var(--primary);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.qa-icon.orange {
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+.qa-icon.teal {
+    background: var(--secondary-bg);
+    color: var(--secondary);
+}
+
+.qa-icon.purple {
+    background: var(--purple-bg);
+    color: var(--purple);
+}
+
+.qa-icon.blue {
+    background: var(--primary-bg);
+    color: var(--primary);
+}
+
+.qa-item:hover .qa-icon {
+    transform: scale(1.08);
+    box-shadow: var(--shadow-md);
+}
+
+.qa-item span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* HOSPITALS SECTION */
+.hospitals-section {
+    margin-bottom: 24px;
+}
+
+.view-all-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* HOSPITAL CARDS */
+.hospital-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.hospital-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.hospital-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: rgba(37, 99, 235, 0.2);
+    transform: translateY(-2px);
+}
+
+.hosp-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.hosp-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--primary-bg);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.hosp-icon.teal {
+    background: var(--secondary-bg);
+    color: var(--secondary);
+}
+
+.hosp-icon.orange {
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+.hosp-icon.red {
+    background: var(--alert-bg);
+    color: var(--alert);
+}
+
+.hosp-info {
+    flex: 1;
+}
+
+.hosp-info h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.hosp-type {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    display: block;
+}
+
+.hosp-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.hosp-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.hosp-stat i {
+    font-size: 0.75rem;
+}
+
+.hosp-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.availability-bar {
+    flex: 1;
+}
+
+.avail-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.avail-pct {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* REQUEST CARD */
+.request-card {
+    background: white;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1);
+}
+
+.request-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.request-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.ambulance-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--primary-bg);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+}
+
+.ambulance-info i {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.ambulance-info h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.ambulance-info p {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.ambulance-info a {
+    margin-left: auto;
+}
+
+.eta-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.eta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    padding: 10px;
+    border-radius: var(--radius-md);
+}
+
+.eta-item i {
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.eta-val {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.eta-sub {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 8px 10px 12px;
+    z-index: 200;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.bottom-nav-item i {
+    font-size: 1.1rem;
+}
+
+.bottom-nav-item.active {
+    color: var(--primary);
+}
+
+.bottom-nav-item.emergency-nav {
+    flex: 0 0 auto;
+}
+
+.emergency-nav-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    margin-top: -20px;
+    transition: transform 0.2s;
+}
+
+.emergency-nav-btn:hover {
+    transform: scale(1.1);
+}

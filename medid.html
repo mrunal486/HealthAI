@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Medical ID</title>
+    <meta name="description" content="Your secure digital Medical ID. Share critical health information with emergency responders instantly.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="patient.css">
+    <style>
+        body { background: #0f172a; }
+        .medid-shell { min-height: 100vh; background: linear-gradient(160deg, #0f172a 0%, #1e293b 70%, #0c1a2e 100%); }
+
+        /* Topbar */
+        .medid-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
+        }
+        .medid-topbar .back-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.08); color: white;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .medid-topbar .bar-title { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700; color: white; }
+
+        /* ── MedID Card ── */
+        .medid-card-wrap { padding: 20px; }
+        .medid-card {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0d2942 50%, #112d44 100%);
+            border: 1px solid rgba(37,99,235,0.3);
+            border-radius: 20px; padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+            position: relative; overflow: hidden;
+        }
+        .medid-card::before {
+            content: ''; position: absolute;
+            top: -60px; right: -60px; width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+        }
+        .medid-card::after {
+            content: ''; position: absolute;
+            bottom: -40px; left: -40px; width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(20,184,166,0.1) 0%, transparent 70%);
+        }
+
+        .card-header-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+        .card-logo { display: flex; align-items: center; gap: 8px; }
+        .card-logo-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            background: linear-gradient(135deg, #2563eb, #14b8a6);
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem;
+        }
+        .card-logo span { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1rem; color: white; }
+        .card-logo small { font-size: 0.65rem; color: rgba(255,255,255,0.4); display: block; }
+        .card-type {
+            background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3);
+            color: #f87171; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+            padding: 4px 10px; border-radius: 6px;
+        }
+
+        .card-avatar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .card-avatar {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #14b8a6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; font-weight: 800; color: white;
+            border: 3px solid rgba(255,255,255,0.15); flex-shrink: 0;
+        }
+        .card-name { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; }
+        .card-uid { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 3px; letter-spacing: 1px; }
+        .card-dob { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+        /* Blood group badge */
+        .blood-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white; border-radius: 10px; padding: 8px 14px;
+            font-size: 1.4rem; font-weight: 800; text-align: center;
+            box-shadow: 0 4px 12px rgba(239,68,68,0.3); margin-left: auto;
+            min-width: 60px;
+        }
+        .blood-badge small { display: block; font-size: 0.6rem; font-weight: 400; opacity: 0.8; }
+
+        /* Info rows */
+        .card-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+        .card-info-item {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 10px 12px;
+        }
+        .card-info-item .ci-label { font-size: 0.65rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-info-item .ci-val { font-size: 0.85rem; color: white; font-weight: 600; margin-top: 2px; }
+
+        /* Allergies / Conditions */
+        .alert-section {
+            background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 10px; padding: 12px; margin-bottom: 12px;
+        }
+        .alert-section .sec-title { font-size: 0.65rem; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .allergy-tag {
+            display: inline-block; background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.25); color: #fca5a5;
+            border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; margin: 2px;
+        }
+
+        /* QR Code */
+        .qr-section { text-align: center; margin-top: 16px; }
+        .qr-canvas-wrap {
+            display: inline-block; padding: 12px;
+            background: white; border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        #qr-canvas { display: block; }
+        .qr-label { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 8px; letter-spacing: 0.5px; }
+
+        /* Action buttons */
+        .medid-actions { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .share-btn {
+            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-share { background: linear-gradient(135deg, #2563eb, #14b8a6); color: white; border: none; }
+        .btn-share:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.3); }
+        .btn-print {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.7);
+        }
+        .btn-emergency-contact {
+            background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25);
+            color: #f87171;
+        }
+
+        /* Edit Modal */
+        .edit-section {
+            margin: 0 20px 20px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; overflow: hidden;
+        }
+        .edit-section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .edit-section-header h4 { font-size: 0.85rem; color: white; display: flex; align-items: center; gap: 8px; }
+        .edit-section-header i { color: #64748b; }
+        .edit-section-body { padding: 16px; display: none; }
+        .edit-section-body.open { display: block; }
+        .edit-label { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-bottom: 5px; display: block; }
+        .edit-input {
+            width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+            color: white; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            outline: none; margin-bottom: 10px; transition: border 0.2s;
+        }
+        .edit-input:focus { border-color: rgba(37,99,235,0.5); }
+        .edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .save-btn {
+            width: 100%; padding: 10px; background: linear-gradient(135deg, #2563eb, #14b8a6);
+            border: none; border-radius: 8px; color: white; font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<div class="medid-shell">
+
+    <!-- Topbar -->
+    <div class="medid-topbar">
+        <a href="#" onclick="history.back(); return false;" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="bar-title"><i class="fas fa-id-card" style="color:#2563eb;margin-right:8px"></i>Medical ID</div>
+        <button onclick="toggleEdit()" style="background:none;border:none;color:#64748b;font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif">
+            <i class="fas fa-pen"></i> Edit
+        </button>
+    </div>
+
+    <!-- MedID Card -->
+    <div class="medid-card-wrap">
+        <div class="medid-card">
+            <div class="card-header-row">
+                <div class="card-logo">
+                    <div class="card-logo-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div>
+                        <span>HealthAI</span>
+                        <small>Medical ID Card</small>
+                    </div>
+                </div>
+                <div class="card-type">EMERGENCY</div>
+            </div>
+
+            <div class="card-avatar-row">
+                <div class="card-avatar" id="avatar-initials">AS</div>
+                <div>
+                    <div class="card-name" id="display-name">Arjun Sharma</div>
+                    <div class="card-uid">ID: HAI-2025-00847</div>
+                    <div class="card-dob" id="display-dob">DOB: 15 Mar 1997 · Age 28</div>
+                </div>
+                <div class="blood-badge"><span id="display-blood">O+</span><small>Blood</small></div>
+            </div>
+
+            <div class="card-info-grid">
+                <div class="card-info-item">
+                    <div class="ci-label">Gender</div>
+                    <div class="ci-val" id="display-gender">Male</div>
+                </div>
+                <div class="card-info-item">
+                    <div class="ci-label">Weight / Height</div>
+                    <div class="ci-val" id="display-body">72 kg / 175 cm</div>
+                </div>
+                <div class="card-info-item">
+                    <div class="ci-label">Emergency Contact</div>
+                    <div class="ci-val" id="display-contact">+91 98765-43210</div>
+                </div>
+                <div class="card-info-item">
+                    <div class="ci-label">Organ Donor</div>
+                    <div class="ci-val" id="display-donor" style="color:#4ade80">✓ Yes</div>
+                </div>
+            </div>
+
+            <div class="alert-section">
+                <div class="sec-title"><i class="fas fa-exclamation-triangle"></i> Allergies & Conditions</div>
+                <div id="display-allergies">
+                    <span class="allergy-tag">⚠️ Penicillin Allergy</span>
+                    <span class="allergy-tag">⚠️ Sulfa Drug Allergy</span>
+                    <span class="allergy-tag">Mild Asthma</span>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-canvas-wrap">
+                    <canvas id="qr-canvas" width="100" height="100"></canvas>
+                </div>
+                <div class="qr-label">Scan to access full medical profile</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="medid-actions">
+        <button class="share-btn btn-share" onclick="shareID()">
+            <i class="fas fa-share-alt"></i>
+            Share with Hospital / Doctor
+        </button>
+        <button class="share-btn btn-emergency-contact" onclick="callEmergencyContact()">
+            <i class="fas fa-phone-alt"></i>
+            Call Emergency Contact
+        </button>
+        <button class="share-btn btn-print" onclick="window.print()">
+            <i class="fas fa-print"></i>
+            Print Medical Card
+        </button>
+    </div>
+
+    <!-- Edit Section -->
+    <div class="edit-section" id="edit-section" style="display:none">
+        <div class="edit-section-header" onclick="toggleEditBody()">
+            <h4><i class="fas fa-user-edit"></i> Edit Medical Profile</h4>
+            <i class="fas fa-chevron-down" id="edit-chevron"></i>
+        </div>
+        <div class="edit-section-body open" id="edit-body">
+            <label class="edit-label">Full Name</label>
+            <input class="edit-input" id="edit-name" value="Arjun Sharma">
+
+            <div class="edit-row">
+                <div>
+                    <label class="edit-label">Date of Birth</label>
+                    <input class="edit-input" id="edit-dob" type="date" value="1997-03-15">
+                </div>
+                <div>
+                    <label class="edit-label">Blood Group</label>
+                    <select class="edit-input" id="edit-blood">
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                        <option selected>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="edit-label">Allergies & Conditions (comma separated)</label>
+            <input class="edit-input" id="edit-allergies" value="Penicillin Allergy, Sulfa Drug Allergy, Mild Asthma">
+
+            <label class="edit-label">Emergency Contact</label>
+            <input class="edit-input" id="edit-contact" value="+91 98765-43210">
+
+            <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+        </div>
+    </div>
+</div>
+
+<script src="auth.js"></script>
+<script src="config.js"></script>
+<script>
+    // ── QR Code Generator (simple canvas-based) ───────────────────────────────
+    function drawQR() {
+        const canvas = document.getElementById('qr-canvas');
+        const ctx = canvas.getContext('2d');
+        const size = 100;
+        const modules = 21; // QR v1 grid
+        const cell = size / modules;
+
+        // Simulated QR pattern (realistic visual)
+        const pattern = [];
+        for (let r = 0; r < modules; r++) {
+            pattern[r] = [];
+            for (let c = 0; c < modules; c++) {
+                // Finder patterns (corners)
+                if ((r < 7 && c < 7) || (r < 7 && c >= modules - 7) || (r >= modules - 7 && c < 7)) {
+                    // Outer ring
+                    if (r === 0 || r === 6 || c === 0 || c === 6) pattern[r][c] = 1;
+                    else if (r >= 2 && r <= 4 && c >= 2 && c <= 4) pattern[r][c] = 1;
+                    else if (r >= modules-7 && r <= modules-1 && c >= 0 && c <= 6){
+                        if(r===modules-7||r===modules-1||c===0||c===6) pattern[r][c]=1;
+                        else if(r>=modules-5&&r<=modules-3&&c>=2&&c<=4) pattern[r][c]=1;
+                    }
+                    else pattern[r][c] = 0;
+                } else {
+                    pattern[r][c] = Math.random() > 0.5 ? 1 : 0;
+                }
+            }
+        }
+
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, size, size);
+        ctx.fillStyle = '#000';
+        for (let r = 0; r < modules; r++) {
+            for (let c = 0; c < modules; c++) {
+                if (pattern[r][c]) {
+                    ctx.fillRect(c * cell, r * cell, cell - 0.5, cell - 0.5);
+                }
+            }
+        }
+
+        // Draw actual finder corners properly
+        [[0,0],[0,modules-7],[modules-7,0]].forEach(([row, col]) => {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(col*cell, row*cell, 7*cell, 7*cell);
+            ctx.fillStyle = '#fff';
+            ctx.fillRect((col+1)*cell, (row+1)*cell, 5*cell, 5*cell);
+            ctx.fillStyle = '#000';
+            ctx.fillRect((col+2)*cell, (row+2)*cell, 3*cell, 3*cell);
+        });
+    }
+
+    // ── Profile Actions ───────────────────────────────────────────────────────
+    function toggleEdit() {
+        const el = document.getElementById('edit-section');
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+    function toggleEditBody() {
+        const body = document.getElementById('edit-body');
+        body.classList.toggle('open');
+        const ch = document.getElementById('edit-chevron');
+        ch.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+    }
+
+    function saveProfile() {
+        const name = document.getElementById('edit-name').value;
+        const blood = document.getElementById('edit-blood').value;
+        const dob = document.getElementById('edit-dob').value;
+        const allergies = document.getElementById('edit-allergies').value;
+        const contact = document.getElementById('edit-contact').value;
+
+        // Update display
+        document.getElementById('display-name').textContent = name;
+        document.getElementById('display-blood').textContent = blood;
+        document.getElementById('avatar-initials').textContent =
+            name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+        if (dob) {
+            const d = new Date(dob);
+            const age = Math.floor((Date.now() - d) / (1000*60*60*24*365));
+            document.getElementById('display-dob').textContent =
+                `DOB: ${d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })} · Age ${age}`;
+        }
+
+        document.getElementById('display-contact').textContent = contact;
+        document.getElementById('display-allergies').innerHTML =
+            allergies.split(',').map(a =>
+                `<span class="allergy-tag">⚠️ ${a.trim()}</span>`
+            ).join('');
+
+        document.getElementById('edit-section').style.display = 'none';
+        showToast('Medical ID saved successfully!');
+    }
+
+    function shareID() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'My Medical ID — HealthAI',
+                text: 'Scan or tap to access my emergency medical information.',
+                url: window.location.href,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard?.writeText(window.location.href);
+            showToast('Link copied to clipboard!');
+        }
+    }
+
+    function callEmergencyContact() {
+        const contact = document.getElementById('edit-contact').value || document.getElementById('display-contact').textContent;
+        window.location.href = `tel:${contact.replace(/\s/g, '')}`;
+    }
+
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.style.cssText = `
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(34,197,94,0.9); color: white; padding: 10px 20px;
+            border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; z-index: 9999;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            animation: toastIn 0.3s ease-out;
+        `;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2500);
+    }
+
+    window.addEventListener('load', () => {
+        HealthAIAuth.guardPage(['patient']);
+        drawQR();
+    });
+</script>
+</body>
+</html>

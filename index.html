@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Smart Healthcare Resource Allocation System</title>
+    <meta name="description"
+        content="AI-powered healthcare resource allocation system that optimizes hospital beds, ICU units, and ambulance dispatch in real-time.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="mobile.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span class="brand-name">HealthAI</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            <div class="nav-actions" id="nav-actions">
+                <!-- Filled dynamically by auth.js -->
+                <a href="login.html" class="btn btn-primary" id="nav-login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-orb orb-1"></div>
+            <div class="hero-orb orb-2"></div>
+            <div class="hero-orb orb-3"></div>
+            <div class="grid-overlay"></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>AI-Powered Healthcare Platform</span>
+                </div>
+                <h1 class="hero-title">
+                    Smart Healthcare<br>
+                    <span class="gradient-text">Resource Allocation</span><br>
+                    System
+                </h1>
+                <p class="hero-subtitle">
+                    Revolutionizing emergency response with real-time AI optimization.
+                    Connecting patients to the right care, at the right time — saving lives through intelligent resource
+                    management.
+                </p>
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary btn-lg pulse-btn" id="get-started-btn"
+                        onclick="handleHeroStart(event)">
+                        <i class="fas fa-play-circle"></i>
+                        Get Started
+                    </a>
+                    <a href="#" class="btn btn-glass btn-lg" id="view-dashboard-btn" onclick="handleViewDash(event)">
+                        <i class="fas fa-chart-line"></i>
+                        View Dashboard
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="2400">0</span><span>+</span>
+                        <span class="stat-label">Hospitals Connected</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="98">0</span><span>%</span>
+                        <span class="stat-label">Response Accuracy</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="340">0</span><span>+</span>
+                        <span class="stat-label">Lives Saved Daily</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="preview-title">Live System Monitor</span>
+                        <span class="live-badge"><span class="live-pulse"></span>LIVE</span>
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-cards">
+                            <div class="mini-card">
+                                <i class="fas fa-bed" style="color:#2563EB"></i>
+                                <div>
+                                    <div class="mini-val">1,247</div>
+                                    <div class="mini-label">Beds Available</div>
+                                </div>
+                            </div>
+                            <div class="mini-card">
+                                <i class="fas fa-ambulance" style="color:#F97316"></i>
+                                <div>
+                                    <div class="mini-val">48</div>
+                                    <div class="mini-label">Ambulances Active</div>
+                                </div>
+                            </div>
+                            <div class="mini-card alert-card">
+                                <i class="fas fa-exclamation-circle" style="color:#EF4444"></i>
+                                <div>
+                                    <div class="mini-val">3</div>
+                                    <div class="mini-label">Critical Alerts</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-chart-area">
+                            <div class="chart-label">Patient Inflow Today</div>
+                            <div class="mini-chart">
+                                <div class="chart-bar" style="height:40%"></div>
+                                <div class="chart-bar" style="height:65%"></div>
+                                <div class="chart-bar" style="height:55%"></div>
+                                <div class="chart-bar" style="height:80%"></div>
+                                <div class="chart-bar" style="height:70%"></div>
+                                <div class="chart-bar active" style="height:90%"></div>
+                                <div class="chart-bar" style="height:75%"></div>
+                            </div>
+                        </div>
+                        <div class="preview-map">
+                            <div class="map-dot dot-a">
+                                <div class="map-ring"></div>
+                                <i class="fas fa-hospital"></i>
+                            </div>
+                            <div class="map-dot dot-b">
+                                <div class="map-ring"></div>
+                                <i class="fas fa-hospital"></i>
+                            </div>
+                            <div class="map-dot dot-c ambulance-dot">
+                                <div class="map-ring amber"></div>
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <svg class="map-lines" viewBox="0 0 300 150">
+                                <line x1="60" y1="50" x2="200" y2="80" stroke="#2563EB" stroke-width="1.5"
+                                    stroke-dasharray="5,3" opacity="0.5" />
+                                <line x1="200" y1="80" x2="240" y2="110" stroke="#14B8A6" stroke-width="1.5"
+                                    stroke-dasharray="5,3" opacity="0.5" />
+                                <line x1="60" y1="50" x2="240" y2="110" stroke="#F97316" stroke-width="1"
+                                    stroke-dasharray="3,4" opacity="0.4" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Why HealthAI</span>
+                <h2 class="section-title">Built for the Future of <span class="gradient-text">Emergency
+                        Healthcare</span></h2>
+                <p class="section-subtitle">Our platform combines cutting-edge AI with real-time data to ensure every
+                    second counts when lives are on the line.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" id="feature-tracking">
+                    <div class="feature-icon blue">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Live GPS tracking of ambulances, hospital occupancy, and resource availability updated every 5
+                        seconds.</p>
+                    <div class="feature-highlight">
+                        <span class="live-dot"></span>
+                        <span>Updated Live</span>
+                    </div>
+                </div>
+                <div class="feature-card featured" id="feature-ai">
+                    <div class="feature-badge">Most Popular</div>
+                    <div class="feature-icon teal">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Resource Allocation</h3>
+                    <p>Machine learning models predict demand, optimize bed allocation, and dispatch the nearest
+                        available ambulance automatically.</p>
+                    <div class="feature-metric">
+                        <span>87%</span> faster allocation vs manual
+                    </div>
+                </div>
+                <div class="feature-card" id="feature-emergency">
+                    <div class="feature-icon orange">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Emergency Response</h3>
+                    <p>One-tap emergency alerts with automatic severity assessment, nearest hospital routing, and
+                        instant ambulance dispatch.</p>
+                    <div class="feature-highlight">
+                        <span>Avg. response: <strong>4.2 min</strong></span>
+                    </div>
+                </div>
+                <div class="feature-card" id="feature-analytics">
+                    <div class="feature-icon purple">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Advanced dashboards with trend analysis, resource forecasting, and actionable insights for
+                        hospital administrators.</p>
+                </div>
+                <div class="feature-card" id="feature-multi">
+                    <div class="feature-icon red">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Multi-Role Platform</h3>
+                    <p>Dedicated interfaces for patients, doctors, hospital admins, and system administrators — each
+                        tailored to their needs.</p>
+                </div>
+                <div class="feature-card" id="feature-secure">
+                    <div class="feature-icon green">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Compliant</h3>
+                    <p>HIPAA-compliant data handling with end-to-end encryption and full audit trails for all medical
+                        records.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Process</span>
+                <h2 class="section-title">How <span class="gradient-text">HealthAI</span> Works</h2>
+            </div>
+            <div class="steps-container">
+                <div class="step-line"></div>
+                <div class="step" id="step-1">
+                    <div class="step-num">01</div>
+                    <div class="step-content">
+                        <div class="step-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <h3>Patient Request</h3>
+                        <p>Patient triggers emergency via app or call center with one tap. Location is automatically
+                            captured.</p>
+                    </div>
+                </div>
+                <div class="step" id="step-2">
+                    <div class="step-num">02</div>
+                    <div class="step-content">
+                        <div class="step-icon"><i class="fas fa-brain"></i></div>
+                        <h3>AI Processing</h3>
+                        <p>System analyzes emergency type, severity, and scans all nearby hospitals for availability in
+                            real-time.</p>
+                    </div>
+                </div>
+                <div class="step" id="step-3">
+                    <div class="step-num">03</div>
+                    <div class="step-content">
+                        <div class="step-icon"><i class="fas fa-ambulance"></i></div>
+                        <h3>Smart Dispatch</h3>
+                        <p>Nearest ambulance is dispatched. Hospital is pre-notified and resources pre-allocated before
+                            arrival.</p>
+                    </div>
+                </div>
+                <div class="step" id="step-4">
+                    <div class="step-num">04</div>
+                    <div class="step-content">
+                        <div class="step-icon"><i class="fas fa-hospital"></i></div>
+                        <h3>Seamless Care</h3>
+                        <p>Patient arrives to prepared team. All vitals, history, and records are instantly available to
+                            doctors.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Roles Section -->
+    <section class="roles-section" id="about">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Platform Access</span>
+                <h2 class="section-title">Built for <span class="gradient-text">Every Role</span></h2>
+            </div>
+            <div class="roles-grid">
+                <a href="patient.html" class="role-card" id="role-patient">
+                    <div class="role-icon">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h3>Patient</h3>
+                    <p>Emergency request, nearby hospitals, live ambulance tracking</p>
+                    <span class="role-link">Open Patient App <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="doctor-dashboard.html" class="role-card" id="role-doctor">
+                    <div class="role-icon teal">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Doctor</h3>
+                    <p>Schedule management, emergency alerts, patient queue</p>
+                    <span class="role-link">Doctor Dashboard <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="hospital-dashboard.html" class="role-card" id="role-hospital">
+                    <div class="role-icon orange">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <h3>Hospital Admin</h3>
+                    <p>Resource management, incoming requests, bed allocation</p>
+                    <span class="role-link">Hospital Dashboard <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="admin-dashboard.html" class="role-card" id="role-admin">
+                    <div class="role-icon purple">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>System Admin</h3>
+                    <p>Overview metrics, analytics, system-wide resource allocation</p>
+                    <span class="role-link">Admin Dashboard <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span class="brand-name">HealthAI</span>
+                <p>Smart Healthcare Resource Allocation System</p>
+                <p class="footer-sub">Built for Google Solution Challenge 2024</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Portals</h4>
+                    <a href="patient.html">Patient App</a>
+                    <a href="hospital-dashboard.html">Hospital Dashboard</a>
+                    <a href="doctor-dashboard.html">Doctor Dashboard</a>
+                    <a href="admin-dashboard.html">Admin Panel</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <a href="#">Real-time Tracking</a>
+                    <a href="#">AI Allocation</a>
+                    <a href="#">Emergency Response</a>
+                    <a href="#">Analytics</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 HealthAI — Smart Healthcare Resource Allocation System. Built for Google Solution Challenge.</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="landing.js"></script>
+    <script>
+        // Update navbar based on auth state
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.renderLandingNav();
+        });
+
+        function handleHeroStart(e) {
+            e.preventDefault();
+            const user = HealthAIAuth.getUser();
+            if (user) {
+                window.location.href = HealthAIAuth.getDashboard(user.role);
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function handleViewDash(e) {
+            e.preventDefault();
+            const user = HealthAIAuth.getUser();
+            if (user) {
+                window.location.href = HealthAIAuth.getDashboard(user.role);
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

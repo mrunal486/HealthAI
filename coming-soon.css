@@ -1,0 +1,68 @@
+/* coming-soon.css */
+.cs-toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface);
+    color: var(--text);
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-left: 4px solid var(--primary);
+    max-width: 90%;
+    width: max-content;
+}
+
+body.dark-mode .cs-toast-container {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-left-color: var(--accent);
+}
+
+.cs-toast-container.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.cs-toast-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+body.dark-mode .cs-toast-icon {
+    color: var(--accent);
+}
+
+.cs-toast-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.cs-toast-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Optional visual indicator on elements itself */
+.coming-soon-badge {
+    background: var(--border-light);
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-block;
+    vertical-align: middle;
+}

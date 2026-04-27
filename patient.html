@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Patient Portal</title>
+    <meta name="description" content="Find nearby hospitals, track ambulances, and request emergency help instantly.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="patient.css">
+    <link rel="stylesheet" href="coming-soon.css">
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+</head>
+
+<body class="patient-app">
+    <!-- Top Bar -->
+    <div class="app-topbar">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="app-title">
+            <span class="brand-dot"></span>
+            HealthAI
+        </div>
+        <button class="app-icon-btn" id="profile-btn" aria-label="Logout" onclick="HealthAIAuth.logout()">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </div>
+
+    <!-- App Content -->
+    <main class="app-main">
+
+        <!-- Greeting + Search -->
+        <section class="greeting-section">
+            <div class="greeting-text">
+                <h2>Hello, <span data-auth-name>Arjun</span> <span class="wave">👋</span></h2>
+                <p>How are you feeling today?</p>
+            </div>
+            <div class="search-bar" id="hospital-search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" id="hospital-search" placeholder="Search hospitals, doctors..."
+                    aria-label="Search hospitals">
+                <button class="search-filter-btn" aria-label="Filter">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- EMERGENCY BUTTON -->
+        <section class="emergency-section">
+            <div class="emergency-card">
+                <div class="emergency-bg-anim"></div>
+                <div class="emergency-content">
+                    <div class="emergency-icon-wrap">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="emergency-text">
+                        <h3>Emergency SOS</h3>
+                        <p>Tap for immediate help. Ambulance dispatched instantly.</p>
+                    </div>
+                </div>
+                <a href="emergency.html" class="sos-btn" id="sos-btn" aria-label="Emergency SOS">
+                    <span class="sos-ring"></span>
+                    <span class="sos-ring delay"></span>
+                    <div class="sos-inner">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>SOS</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <div class="qa-label">Quick Access</div>
+            <div class="qa-grid">
+                <a href="emergency.html" class="qa-item" id="qa-ambulance">
+                    <div class="qa-icon orange">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <span>Ambulance</span>
+                </a>
+                <a href="ai-triage.html" class="qa-item" id="qa-triage">
+                    <div class="qa-icon purple">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <span>AI Triage</span>
+                </a>
+                <a href="map.html" class="qa-item" id="qa-map">
+                    <div class="qa-icon teal">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <span>Live Map</span>
+                </a>
+                <a href="#" class="qa-item coming-soon" id="qa-medid">
+                    <div class="qa-icon blue">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <span>Med ID</span>
+                </a>
+                <a href="tracking.html" class="qa-item" id="qa-track">
+                    <div class="qa-icon" style="background:var(--success-bg);color:var(--success)">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <span>Track</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Nearby Hospitals -->
+        <section class="hospitals-section">
+            <div class="section-head">
+                <div>
+                    <h3>Nearby Hospitals</h3>
+                    <p>Based on your location</p>
+                </div>
+                <button class="view-all-btn">View All <i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="hospital-cards" id="hospital-list">
+
+                <!-- Hospital 1 -->
+                <div class="hospital-card" id="hosp-1">
+                    <div class="hosp-header">
+                        <div class="hosp-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="hosp-info">
+                            <h4>City General Hospital</h4>
+                            <span class="hosp-type">Multi-Specialty</span>
+                        </div>
+                        <span class="badge badge-success">Open</span>
+                    </div>
+                    <div class="hosp-stats">
+                        <div class="hosp-stat">
+                            <i class="fas fa-bed"></i>
+                            <span><strong>42</strong> Beds</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>1.2</strong> km</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>5</strong> min</span>
+                        </div>
+                    </div>
+                    <div class="hosp-footer">
+                        <div class="availability-bar">
+                            <div class="avail-label">
+                                <span>Bed Occupancy</span>
+                                <span class="avail-pct">68%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:68%;background:linear-gradient(90deg,#22C55E,#16A34A)"></div>
+                            </div>
+                        </div>
+                        <a href="tracking.html" class="btn btn-primary btn-sm">Get Care</a>
+                    </div>
+                </div>
+
+                <!-- Hospital 2 -->
+                <div class="hospital-card" id="hosp-2">
+                    <div class="hosp-header">
+                        <div class="hosp-icon teal">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="hosp-info">
+                            <h4>Apollo Medical Center</h4>
+                            <span class="hosp-type">Super Specialty</span>
+                        </div>
+                        <span class="badge badge-success">Open 24/7</span>
+                    </div>
+                    <div class="hosp-stats">
+                        <div class="hosp-stat">
+                            <i class="fas fa-bed"></i>
+                            <span><strong>87</strong> Beds</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>2.8</strong> km</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>9</strong> min</span>
+                        </div>
+                    </div>
+                    <div class="hosp-footer">
+                        <div class="availability-bar">
+                            <div class="avail-label">
+                                <span>Bed Occupancy</span>
+                                <span class="avail-pct">42%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:42%;background:linear-gradient(90deg,#14B8A6,#0D9488)"></div>
+                            </div>
+                        </div>
+                        <a href="tracking.html" class="btn btn-primary btn-sm">Get Care</a>
+                    </div>
+                </div>
+
+                <!-- Hospital 3 -->
+                <div class="hospital-card" id="hosp-3">
+                    <div class="hosp-header">
+                        <div class="hosp-icon orange">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="hosp-info">
+                            <h4>Sunrise Trauma Center</h4>
+                            <span class="hosp-type">Emergency & Trauma</span>
+                        </div>
+                        <span class="badge badge-warning">Busy</span>
+                    </div>
+                    <div class="hosp-stats">
+                        <div class="hosp-stat">
+                            <i class="fas fa-bed"></i>
+                            <span><strong>8</strong> Beds</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>4.1</strong> km</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>13</strong> min</span>
+                        </div>
+                    </div>
+                    <div class="hosp-footer">
+                        <div class="availability-bar">
+                            <div class="avail-label">
+                                <span>Bed Occupancy</span>
+                                <span class="avail-pct">91%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:91%;background:linear-gradient(90deg,#F97316,#EA580C)"></div>
+                            </div>
+                        </div>
+                        <a href="tracking.html" class="btn btn-sm"
+                            style="background:var(--accent-bg);color:var(--accent);">Details</a>
+                    </div>
+                </div>
+
+                <!-- Hospital 4 -->
+                <div class="hospital-card" id="hosp-4">
+                    <div class="hosp-header">
+                        <div class="hosp-icon red">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="hosp-info">
+                            <h4>LifeCare Hospital</h4>
+                            <span class="hosp-type">ICU Specialist</span>
+                        </div>
+                        <span class="badge badge-danger">Full</span>
+                    </div>
+                    <div class="hosp-stats">
+                        <div class="hosp-stat">
+                            <i class="fas fa-bed"></i>
+                            <span><strong>0</strong> Beds</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>5.5</strong> km</span>
+                        </div>
+                        <div class="hosp-stat">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>17</strong> min</span>
+                        </div>
+                    </div>
+                    <div class="hosp-footer">
+                        <div class="availability-bar">
+                            <div class="avail-label">
+                                <span>Bed Occupancy</span>
+                                <span class="avail-pct" style="color:var(--alert)">100%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:100%;background:linear-gradient(90deg,#EF4444,#DC2626)"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm" disabled style="opacity:0.5;cursor:not-allowed;">Full</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Request -->
+        <section class="request-section" id="active-request" style="display:none">
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="live-badge"><span class="live-pulse"></span>TRACKING</span>
+                    <h3>Your Ambulance</h3>
+                </div>
+                <div class="request-body">
+                    <div class="ambulance-info">
+                        <i class="fas fa-ambulance"></i>
+                        <div>
+                            <h4>KA-01-Z-1234</h4>
+                            <p>Driver: Rajan Kumar · <i class="fas fa-star" style="color:#F59E0B;font-size:0.7rem"></i>
+                                4.9</p>
+                        </div>
+                        <a href="tracking.html" class="btn btn-primary btn-sm">Track</a>
+                    </div>
+                    <div class="eta-bar">
+                        <div class="eta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <span class="eta-val">1.8 km</span>
+                                <span class="eta-sub">Away</span>
+                            </div>
+                        </div>
+                        <div class="eta-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <span class="eta-val">4 min</span>
+                                <span class="eta-sub">ETA</span>
+                            </div>
+                        </div>
+                        <div class="eta-item">
+                            <i class="fas fa-hospital"></i>
+                            <div>
+                                <span class="eta-val">City General</span>
+                                <span class="eta-sub">Destination</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav-item active" id="nav-home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#hospitals-section" class="bottom-nav-item" id="nav-hospitals">
+            <i class="fas fa-hospital"></i>
+            <span>Hospitals</span>
+        </a>
+        <a href="emergency.html" class="bottom-nav-item emergency-nav" id="nav-emergency">
+            <div class="emergency-nav-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="tracking.html" class="bottom-nav-item" id="nav-track">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Track</span>
+        </a>
+        <a href="#" class="bottom-nav-item coming-soon" id="nav-profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="auth.js"></script>
+    <script src="coming-soon.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.guardPage(['patient']);
+            const user = HealthAIAuth.getUser();
+            if (user) {
+                // Get the first name for the greeting
+                const firstName = user.name.split(' ')[0];
+                document.querySelectorAll('[data-auth-name]').forEach(el => el.textContent = firstName);
+            }
+        });
+
+        // Filter hospitals on search
+        const searchInput = document.getElementById('hospital-search');
+        const hospitalCards = document.querySelectorAll('.hospital-card');
+        searchInput?.addEventListener('input', e => {
+            const query = e.target.value.toLowerCase();
+            hospitalCards.forEach(card => {
+                const name = card.querySelector('h4').textContent.toLowerCase();
+                card.style.display = name.includes(query) ? '' : 'none';
+            });
+        });
+
+        // Animate cards on load
+        hospitalCards.forEach((card, i) => {
+            card.style.animationDelay = `${i * 0.1}s`;
+            card.classList.add('animate-fadeInUp');
+        });
+    </script>
+</body>
+
+</html>

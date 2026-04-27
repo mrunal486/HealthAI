@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Hospital Dashboard</title>
+    <meta name="description" content="Hospital admin dashboard for resource management and patient intake.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="coming-soon.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon-sm"><i class="fas fa-heartbeat"></i></div>
+                <div class="brand-text">
+                    <h3>HealthAI</h3>
+                    <p>City General Hospital</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <span class="nav-section-label">Main</span>
+                <a href="#" class="sidebar-link active" id="sl-overview"><i class="fas fa-th-large"></i> Overview</a>
+                <a href="#" class="sidebar-link" id="sl-requests"><i class="fas fa-ambulance"></i> Incoming Requests
+                    <span class="badge-count">3</span></a>
+                <a href="#" class="sidebar-link" id="sl-beds"><i class="fas fa-bed"></i> Bed Management</a>
+                <span class="nav-section-label">Resources</span>
+                <a href="resources.html" class="sidebar-link" id="sl-resources"><i class="fas fa-boxes"></i>
+                    Resources</a>
+                <a href="#" class="sidebar-link coming-soon" id="sl-doctors"><i class="fas fa-user-md"></i>
+                    Doctors</a>
+                <span class="nav-section-label">Reports</span>
+                <a href="#" class="sidebar-link coming-soon" id="sl-analytics"><i class="fas fa-chart-bar"></i> Analytics</a>
+                <a href="#" class="sidebar-link coming-soon" id="sl-settings"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="user-avatar" data-auth-avatar>DA</div>
+                    <div class="user-info">
+                        <h4 data-auth-name>Dr. Anjali Rao</h4>
+                        <p data-auth-role>Hospital Administrator</p>
+                    </div>
+                </div>
+                <button class="sidebar-logout-btn" onclick="HealthAIAuth.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h2>Hospital Dashboard</h2>
+                    <p>City General Hospital · Live Status</p>
+                </div>
+                <div class="topbar-right">
+                    <span class="live-badge"><span class="live-pulse"></span>LIVE</span>
+                    <button class="icon-btn alert-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <div class="notif-dot"></div>
+                    </button>
+                    <button class="icon-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+                    <a href="index.html" class="btn btn-outline btn-sm">← Back to Home</a>
+                </div>
+            </div>
+
+            <div class="page-content">
+
+                <!-- ALERT BANNER -->
+                <div class="alert-banner" id="alert-banner">
+                    <div class="alert-banner-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-banner-text">
+                        <strong>High Priority Alert:</strong> ICU capacity at 89%. Consider redirecting non-critical
+                        patients to Apollo Medical (2.8 km).
+                    </div>
+                    <button class="alert-banner-close" onclick="this.parentElement.style.display='none'"
+                        aria-label="Close alert">×</button>
+                </div>
+
+                <!-- METRICS -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon blue"><i class="fas fa-bed"></i></div>
+                        <div class="metric-info">
+                            <div class="metric-value">42</div>
+                            <div class="metric-label">Available Beds</div>
+                            <div class="metric-change up"><i class="fas fa-arrow-up"></i> +5 from yesterday</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon red"><i class="fas fa-procedures"></i></div>
+                        <div class="metric-info">
+                            <div class="metric-value">8</div>
+                            <div class="metric-label">ICU Units Available</div>
+                            <div class="metric-change down"><i class="fas fa-arrow-down"></i> -3 from yesterday</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon teal"><i class="fas fa-lungs"></i></div>
+                        <div class="metric-info">
+                            <div class="metric-value">12</div>
+                            <div class="metric-label">Ventilators Free</div>
+                            <div class="metric-change up"><i class="fas fa-arrow-up"></i> Stable</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon orange"><i class="fas fa-ambulance"></i></div>
+                        <div class="metric-info">
+                            <div class="metric-value">5</div>
+                            <div class="metric-label">Ambulances Active</div>
+                            <div class="metric-change up"><i class="fas fa-arrow-up"></i> All operational</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHARTS + REQUESTS -->
+                <div class="dash-grid-2">
+
+                    <!-- Occupancy Charts -->
+                    <div class="dash-card" id="occupancy-card">
+                        <div class="section-head">
+                            <div>
+                                <h3>Resource Occupancy</h3>
+                                <p>Live utilization rates</p>
+                            </div>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <span class="live-badge"><span class="live-pulse"></span>Live</span>
+                                <button class="btn btn-primary btn-sm" onclick="document.getElementById('capacity-modal').style.display='flex'">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- General Beds Bar -->
+                        <div class="resource-item">
+                            <div class="resource-label-row">
+                                <span class="resource-name"><i class="fas fa-bed" style="color:var(--primary)"></i>
+                                    General Beds</span>
+                                <span class="resource-pct" style="color:var(--success)">68%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:68%;background:linear-gradient(90deg,#22C55E,#16A34A)"></div>
+                            </div>
+                            <div class="resource-meta">42 available of 130 total</div>
+                        </div>
+
+                        <div class="resource-item">
+                            <div class="resource-label-row">
+                                <span class="resource-name"><i class="fas fa-procedures" style="color:var(--alert)"></i>
+                                    ICU Units</span>
+                                <span class="resource-pct" style="color:var(--warning)">89%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:89%;background:linear-gradient(90deg,#F59E0B,#D97706)"></div>
+                            </div>
+                            <div class="resource-meta">8 available of 72 total</div>
+                        </div>
+
+                        <div class="resource-item">
+                            <div class="resource-label-row">
+                                <span class="resource-name"><i class="fas fa-lungs" style="color:var(--secondary)"></i>
+                                    Ventilators</span>
+                                <span class="resource-pct" style="color:var(--success)">44%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:44%;background:linear-gradient(90deg,#14B8A6,#0D9488)"></div>
+                            </div>
+                            <div class="resource-meta">12 available of 22 total</div>
+                        </div>
+
+                        <div class="resource-item">
+                            <div class="resource-label-row">
+                                <span class="resource-name"><i class="fas fa-ambulance" style="color:var(--accent)"></i>
+                                    Ambulances</span>
+                                <span class="resource-pct" style="color:var(--success)">38%</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"
+                                    style="width:38%;background:linear-gradient(90deg,#F97316,#EA580C)"></div>
+                            </div>
+                            <div class="resource-meta">5 active of 8 total</div>
+                        </div>
+
+                        <!-- Mini Bar Chart -->
+                        <div class="mini-bar-chart" id="trend-chart">
+                            <div class="chart-label-row">
+                                <span>Patient Inflow — Last 7 Days</span>
+                            </div>
+                            <div class="bar-chart-area">
+                                <div class="bar-group">
+                                    <div class="bar" style="height:55%"></div>
+                                    <span>Mon</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar" style="height:70%"></div>
+                                    <span>Tue</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar" style="height:48%"></div>
+                                    <span>Wed</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar" style="height:85%"></div>
+                                    <span>Thu</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar" style="height:62%"></div>
+                                    <span>Fri</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar" style="height:90%"></div>
+                                    <span>Sat</span>
+                                </div>
+                                <div class="bar-group active">
+                                    <div class="bar" style="height:75%"></div>
+                                    <span>Sun</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Incoming Requests -->
+                    <div class="dash-card" id="requests-card">
+                        <div class="section-head">
+                            <div>
+                                <h3>Incoming Requests</h3>
+                                <p>Emergency patient queue</p>
+                            </div>
+                            <span class="badge badge-danger">3 Pending</span>
+                        </div>
+                        <div class="requests-list">
+
+                            <div class="request-item critical" id="req-1">
+                                <div class="req-severity critical-sev">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <div class="req-info">
+                                    <h4>Rahul Mehta</h4>
+                                    <p>Cardiac Arrest · Severity: <strong>High</strong></p>
+                                    <span class="req-meta"><i class="fas fa-ambulance"></i> ETA: 3 min ·
+                                        KA-01-Z-1234</span>
+                                </div>
+                                <div class="req-actions">
+                                    <button class="btn btn-success btn-sm accept-btn"
+                                        onclick="acceptRequest(this, 'req-1')">Accept</button>
+                                    <button class="btn btn-sm"
+                                        style="background:var(--border-light);color:var(--text-muted)">Redirect</button>
+                                </div>
+                            </div>
+
+                            <div class="request-item" id="req-2">
+                                <div class="req-severity medium-sev">
+                                    <i class="fas fa-car-crash"></i>
+                                </div>
+                                <div class="req-info">
+                                    <h4>Priya Singh</h4>
+                                    <p>Road Accident · Severity: <strong>Medium</strong></p>
+                                    <span class="req-meta"><i class="fas fa-ambulance"></i> ETA: 8 min ·
+                                        KA-01-Z-5892</span>
+                                </div>
+                                <div class="req-actions">
+                                    <button class="btn btn-success btn-sm accept-btn"
+                                        onclick="acceptRequest(this, 'req-2')">Accept</button>
+                                    <button class="btn btn-sm"
+                                        style="background:var(--border-light);color:var(--text-muted)">Redirect</button>
+                                </div>
+                            </div>
+
+                            <div class="request-item" id="req-3">
+                                <div class="req-severity medium-sev">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="req-info">
+                                    <h4>Suresh Kumar</h4>
+                                    <p>Stroke · Severity: <strong>High</strong></p>
+                                    <span class="req-meta"><i class="fas fa-ambulance"></i> ETA: 12 min ·
+                                        KA-01-Z-2210</span>
+                                </div>
+                                <div class="req-actions">
+                                    <button class="btn btn-success btn-sm accept-btn"
+                                        onclick="acceptRequest(this, 'req-3')">Accept</button>
+                                    <button class="btn btn-sm"
+                                        style="background:var(--border-light);color:var(--text-muted)">Redirect</button>
+                                </div>
+                            </div>
+
+                            <!-- Accepted -->
+                            <div class="request-item accepted" id="req-4">
+                                <div class="req-severity accepted-sev">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="req-info">
+                                    <h4>Anjali Desai</h4>
+                                    <p>Breathing Issue · Severity: <strong>Medium</strong></p>
+                                    <span class="req-meta"><i class="fas fa-hospital"></i> ICU Room 3
+                                        Pre-assigned</span>
+                                </div>
+                                <div class="req-actions">
+                                    <span class="badge badge-success">Accepted</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PATIENTS TABLE -->
+                <div class="dash-card" id="patients-table-card" style="margin-top:24px">
+                    <div class="section-head">
+                        <div>
+                            <h3>Current Patients</h3>
+                            <p>Today's admitted patients</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Export <i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Emergency Type</th>
+                                    <th>Ward</th>
+                                    <th>Doctor</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar" style="background:#EFF6FF;color:var(--primary)">
+                                                RS</div>
+                                            <div>
+                                                <div class="patient-name">Ramesh Singh</div>
+                                                <div class="patient-age">M, 52 · A+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-danger">Cardiac</span></td>
+                                    <td>ICU · Room 4</td>
+                                    <td>Dr. Sharma</td>
+                                    <td>08:14 AM</td>
+                                    <td><span class="badge badge-warning">In Treatment</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar"
+                                                style="background:#F0FDFA;color:var(--secondary)">KP</div>
+                                            <div>
+                                                <div class="patient-name">Kavya Patel</div>
+                                                <div class="patient-age">F, 34 · B+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-warning">Trauma</span></td>
+                                    <td>Ward B · Room 12</td>
+                                    <td>Dr. Mishra</td>
+                                    <td>09:30 AM</td>
+                                    <td><span class="badge badge-success">Stable</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar" style="background:#FFF7ED;color:var(--accent)">
+                                                MK</div>
+                                            <div>
+                                                <div class="patient-name">Mukesh Kumar</div>
+                                                <div class="patient-age">M, 67 · O-</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-info">Breathing</span></td>
+                                    <td>ICU · Room 7</td>
+                                    <td>Dr. Rao</td>
+                                    <td>11:02 AM</td>
+                                    <td><span class="badge badge-danger">Critical</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar" style="background:#F5F3FF;color:var(--purple)">
+                                                PV</div>
+                                            <div>
+                                                <div class="patient-name">Pooja Verma</div>
+                                                <div class="patient-age">F, 28 · AB+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-info">Accident</span></td>
+                                    <td>General · Room 22</td>
+                                    <td>Dr. Nair</td>
+                                    <td>12:45 PM</td>
+                                    <td><span class="badge badge-success">Recovering</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Capacity Modal (Demo) -->
+    <div id="capacity-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+        <div class="modal-content" style="background:var(--surface);padding:24px;border-radius:12px;width:300px;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin:0 0 16px 0;">Update Capacity</h3>
+            <div style="margin-bottom:12px;">
+                <label style="display:block;margin-bottom:4px;font-size:0.875rem;">General Beds Available</label>
+                <input type="number" id="mod-beds" value="42" style="width:100%;padding:8px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg);color:var(--text);">
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:4px;font-size:0.875rem;">ICU Units Available</label>
+                <input type="number" id="mod-icu" value="8" style="width:100%;padding:8px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg);color:var(--text);">
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('capacity-modal').style.display='none'">Cancel</button>
+                <button class="btn btn-primary btn-sm" onclick="saveCapacity()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="coming-soon.js"></script>
+    <script src="data.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+        // Auth guard: hospital admins only
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.guardPage(['hospital', 'admin']);
+            HealthAIAuth.injectUserUI();
+            HealthAIAuth.initMobileSidebar();
+        });
+
+        function acceptRequest(btn, reqId) {
+            const item = document.getElementById(reqId);
+            item.classList.remove('critical');
+            item.classList.add('accepted');
+            const sev = item.querySelector('.req-severity');
+            sev.className = 'req-severity accepted-sev';
+            sev.innerHTML = '<i class="fas fa-check"></i>';
+            const actDiv = item.querySelector('.req-actions');
+            actDiv.innerHTML = '<span class="badge badge-success">Accepted</span>';
+            const pending = document.querySelector('.badge-danger');
+            if (pending && pending.textContent.includes('Pending')) {
+                const n = parseInt(pending.textContent) - 1;
+                pending.textContent = n > 0 ? `${n} Pending` : 'All Assigned';
+                if (n === 0) pending.className = 'badge badge-success';
+            }
+        }
+
+        // Demo Capacity Updater
+        function saveCapacity() {
+            const beds = document.getElementById('mod-beds').value;
+            const icu = document.getElementById('mod-icu').value;
+            
+            // Update upper top metrics cards
+            const metricVals = document.querySelectorAll('.metric-value');
+            if(metricVals[0]) metricVals[0].textContent = beds;
+            if(metricVals[1]) metricVals[1].textContent = icu;
+            
+            // Update occupancy chart labels (demo only logic)
+            const metaLabels = document.querySelectorAll('.resource-meta');
+            if(metaLabels[0]) metaLabels[0].textContent = `${beds} available of 130 total`;
+            if(metaLabels[1]) metaLabels[1].textContent = `${icu} available of 72 total`;
+
+            // Close modal
+            document.getElementById('capacity-modal').style.display = 'none';
+
+            // Show a success toast if coming-soon handler reinit can be hijacked or just alert
+            const alertB = document.getElementById('alert-banner');
+            if(alertB) {
+                alertB.style.display = 'flex';
+                alertB.className = 'alert-banner';
+                alertB.style.borderLeftColor = 'var(--success)';
+                alertB.innerHTML = `
+                    <div class="alert-banner-icon" style="color:var(--success)"><i class="fas fa-check-circle"></i></div>
+                    <div class="alert-banner-text"><strong>System Updated:</strong> Capacity metrics broadcasted to central triage real-time.</div>
+                    <button class="alert-banner-close" onclick="this.parentElement.style.display='none'">×</button>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

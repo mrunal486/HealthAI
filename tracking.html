@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Live Tracking</title>
+    <meta name="description" content="Track your ambulance in real-time on an interactive map.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="patient.css">
+    <link rel="stylesheet" href="tracking.css">
+</head>
+
+<body class="patient-app tracking-page">
+
+    <!-- Top Bar -->
+    <div class="app-topbar tracking-topbar">
+        <a href="#" onclick="history.back(); return false;" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="app-title">
+            <span class="live-badge"><span class="live-pulse"></span>LIVE</span>
+            Ambulance Tracking
+        </div>
+        <button class="app-icon-btn" id="share-btn" aria-label="Share location">
+            <i class="fas fa-share-alt"></i>
+        </button>
+    </div>
+
+    <main class="tracking-main">
+
+        <!-- MAP AREA -->
+        <div class="map-container" id="map-container">
+            <!-- Simulated Map Background -->
+            <div class="map-bg">
+                <div class="map-grid"></div>
+                <!-- Road Lines -->
+                <svg class="map-roads" viewBox="0 0 400 350" preserveAspectRatio="xMidYMid meet">
+                    <!-- Main roads -->
+                    <line x1="0" y1="175" x2="400" y2="175" stroke="rgba(255,255,255,0.4)" stroke-width="12" />
+                    <line x1="200" y1="0" x2="200" y2="350" stroke="rgba(255,255,255,0.4)" stroke-width="10" />
+                    <line x1="0" y1="80" x2="400" y2="120" stroke="rgba(255,255,255,0.25)" stroke-width="7" />
+                    <line x1="0" y1="260" x2="400" y2="280" stroke="rgba(255,255,255,0.25)" stroke-width="7" />
+                    <line x1="100" y1="0" x2="120" y2="350" stroke="rgba(255,255,255,0.2)" stroke-width="5" />
+                    <line x1="300" y1="0" x2="310" y2="350" stroke="rgba(255,255,255,0.2)" stroke-width="5" />
+                    <!-- Road labels -->
+                    <text x="30" y="168" fill="rgba(255,255,255,0.5)" font-size="10" font-family="Inter">MG Road</text>
+                    <text x="205" y="50" fill="rgba(255,255,255,0.5)" font-size="10" font-family="Inter">Sector
+                        12</text>
+                </svg>
+
+                <!-- Buildings (blocks) -->
+                <div class="map-block" style="top:40px;left:25px;width:60px;height:50px;"></div>
+                <div class="map-block" style="top:40px;left:130px;width:50px;height:40px;"></div>
+                <div class="map-block" style="top:40px;left:230px;width:55px;height:45px;"></div>
+                <div class="map-block" style="top:40px;left:320px;width:60px;height:50px;"></div>
+                <div class="map-block" style="top:210px;left:25px;width:60px;height:60px;"></div>
+                <div class="map-block" style="top:210px;left:130px;width:55px;height:50px;"></div>
+                <div class="map-block" style="top:220px;left:230px;width:50px;height:55px;"></div>
+                <div class="map-block" style="top:210px;left:320px;width:65px;height:55px;"></div>
+
+                <!-- Route Path (animated dashed line) -->
+                <svg class="route-svg" viewBox="0 0 400 350">
+                    <path class="route-path" d="M 80 280 Q 130 175 200 175 Q 280 175 320 120" stroke="var(--primary)"
+                        stroke-width="4" fill="none" stroke-dasharray="10,6" />
+                    <!-- Progress filled route -->
+                    <path class="route-progress" d="M 80 280 Q 100 250 130 220" stroke="var(--secondary)"
+                        stroke-width="4" fill="none" />
+                </svg>
+
+                <!-- User Location Marker -->
+                <div class="map-marker user-marker" style="bottom:80px;left:60px" id="user-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-icon user">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="marker-label">You</div>
+                </div>
+
+                <!-- Hospital Marker -->
+                <div class="map-marker hospital-marker" style="top:80px;right:60px" id="hosp-marker">
+                    <div class="marker-icon hospital">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="marker-label">City General</div>
+                </div>
+
+                <!-- Ambulance (animated) -->
+                <div class="map-marker ambulance-marker" id="amb-marker" style="bottom:130px;left:130px">
+                    <div class="amb-ping"></div>
+                    <div class="marker-icon ambulance">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="marker-label amb-label">KA-01-Z-1234</div>
+                </div>
+
+                <!-- Map Legend -->
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot blue"></div>
+                        <span>Route</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot teal"></div>
+                        <span>Progress</span>
+                    </div>
+                </div>
+
+                <!-- Zoom Controls -->
+                <div class="map-controls">
+                    <button class="map-ctrl-btn" id="zoom-in" aria-label="Zoom in"><i class="fas fa-plus"></i></button>
+                    <button class="map-ctrl-btn" id="zoom-out" aria-label="Zoom out"><i
+                            class="fas fa-minus"></i></button>
+                    <button class="map-ctrl-btn" id="center-btn" aria-label="Center map"><i
+                            class="fas fa-crosshairs"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM PANEL -->
+        <div class="tracking-panel">
+            <!-- Drag Handle -->
+            <div class="drag-handle"></div>
+
+            <!-- Ambulance Info -->
+            <div class="amb-card">
+                <div class="amb-card-left">
+                    <div class="amb-avatar">
+                        <div class="amb-lights-small">
+                            <span class="al l"></span>
+                            <span class="al r"></span>
+                        </div>
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="amb-details">
+                        <h4>KA-01-Z-1234</h4>
+                        <p><i class="fas fa-user-md"></i> Paramedic: Dr. Suresh</p>
+                        <div class="driver-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="amb-contact">
+                    <button class="contact-btn call" id="call-driver" aria-label="Call driver">
+                        <i class="fas fa-phone-alt"></i>
+                    </button>
+                    <button class="contact-btn msg" id="msg-driver" aria-label="Message driver">
+                        <i class="fas fa-comment"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ETA Stats -->
+            <div class="eta-stats">
+                <div class="eta-stat-card" id="eta-distance">
+                    <div class="eta-icon blue">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div>
+                        <div class="eta-big" id="eta-dist-val">1.8 km</div>
+                        <div class="eta-lbl">Distance</div>
+                    </div>
+                </div>
+                <div class="eta-stat-card highlight" id="eta-time">
+                    <div class="eta-icon red">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <div class="eta-big" id="eta-time-val">4 min</div>
+                        <div class="eta-lbl">ETA</div>
+                    </div>
+                </div>
+                <div class="eta-stat-card" id="eta-hospital">
+                    <div class="eta-icon teal">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div>
+                        <div class="eta-big" id="eta-hosp-val">City</div>
+                        <div class="eta-lbl">Hospital</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="tracking-steps">
+                <h4>Status</h4>
+                <div class="t-step done" id="ts-1">
+                    <div class="ts-icon"><i class="fas fa-check"></i></div>
+                    <div class="ts-content">
+                        <span class="ts-title">Request Accepted</span>
+                        <span class="ts-time">10:24 AM</span>
+                    </div>
+                </div>
+                <div class="t-step done" id="ts-2">
+                    <div class="ts-icon"><i class="fas fa-check"></i></div>
+                    <div class="ts-content">
+                        <span class="ts-title">Ambulance Dispatched</span>
+                        <span class="ts-time">10:25 AM</span>
+                    </div>
+                </div>
+                <div class="t-step active" id="ts-3">
+                    <div class="ts-icon">
+                        <div class="ts-spinner"></div>
+                    </div>
+                    <div class="ts-content">
+                        <span class="ts-title">On The Way to You</span>
+                        <span class="ts-time">Now · ~4 min</span>
+                    </div>
+                </div>
+                <div class="t-step" id="ts-4">
+                    <div class="ts-icon"><i class="fas fa-hospital"></i></div>
+                    <div class="ts-content">
+                        <span class="ts-title">Arrived at Hospital</span>
+                        <span class="ts-time">Estimated 10:33 AM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hospital Info -->
+            <div class="destination-card">
+                <div class="dest-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <div class="dest-info">
+                    <h4>City General Hospital</h4>
+                    <p>Emergency dept. pre-notified · Bed reserved</p>
+                    <div class="dest-status">
+                        <span class="badge badge-success"><i class="fas fa-check-circle"></i> Team Ready</span>
+                        <span class="badge badge-info"><i class="fas fa-bed"></i> Bed Pre-assigned</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Cancel -->
+            <button class="cancel-btn" id="cancel-emergency">
+                <i class="fas fa-times-circle"></i>
+                Cancel Emergency Request
+            </button>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.guardPage(['patient']);
+        });
+
+        const ambMarker = document.getElementById('amb-marker');
+        const etaTimeVal = document.getElementById('eta-time-val');
+        const etaDistVal = document.getElementById('eta-dist-val');
+
+        let totalSeconds = 4 * 60;
+        const totalDist = 1.8;
+
+        const waypoints = [
+            { left: '33%', bottom: '37%' }, { left: '40%', bottom: '42%' },
+            { left: '48%', bottom: '47%' }, { left: '56%', bottom: '50%' },
+            { left: '65%', bottom: '51%' }, { left: '73%', bottom: '54%' },
+            { left: '78%', bottom: '60%' },
+        ];
+        let wpIdx = 0;
+
+        function moveToNextWaypoint() {
+            if (wpIdx < waypoints.length) {
+                const wp = waypoints[wpIdx++];
+                ambMarker.style.transition = 'left 2.5s ease, bottom 2.5s ease';
+                ambMarker.style.left = wp.left;
+                ambMarker.style.bottom = wp.bottom;
+            }
+        }
+        moveToNextWaypoint();
+        const moveInterval = setInterval(moveToNextWaypoint, 35000);
+
+        const ticker = setInterval(() => {
+            totalSeconds = Math.max(0, totalSeconds - 1);
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            const distRemaining = ((totalSeconds / (4 * 60)) * totalDist).toFixed(1);
+
+            etaTimeVal.textContent = totalSeconds > 60
+                ? `${mins}:${String(secs).padStart(2, '0')}`
+                : totalSeconds > 0 ? `${totalSeconds}s` : 'Arriving!';
+            etaDistVal.textContent = distRemaining > 0 ? `${distRemaining} km` : '< 100 m';
+
+            if (totalSeconds === 0) {
+                clearInterval(ticker);
+                clearInterval(moveInterval);
+                ambMarker.querySelector('.amb-ping').style.background = 'var(--success)';
+                document.getElementById('ts-3').classList.remove('active');
+                document.getElementById('ts-3').classList.add('done');
+                document.getElementById('ts-4').classList.add('active');
+                document.getElementById('ts-4').querySelector('.ts-title').textContent = 'Arrived! ✓';
+                document.getElementById('ts-4').querySelector('.ts-time').textContent = 'Now';
+            }
+        }, 1000);
+
+        document.getElementById('cancel-emergency').addEventListener('click', () => {
+            if (confirm('Cancel Emergency? This will cancel your ambulance request.')) {
+                clearInterval(ticker);
+                clearInterval(moveInterval);
+                window.location.href = 'patient.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

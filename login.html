@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HealthAI | Sign In</title>
+    <meta name="description" content="Login or register to HealthAI — Smart Resource Allocation for Healthcare.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="login-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="login-wrapper">
+
+        <!-- Brand -->
+        <div class="login-brand">
+            <div class="brand-icon-lg"><i class="fas fa-heartbeat"></i></div>
+            <div class="brand-title">Health<span class="brand-ai">AI</span></div>
+        </div>
+
+        <!-- Card -->
+        <div class="login-card">
+
+            <!-- Step Indicators -->
+            <div class="step-indicator" id="step-indicator">
+                <div class="step-dot active" id="dot-1"></div>
+                <div class="step-dot" id="dot-2"></div>
+            </div>
+
+            <!-- ══════════════════════════════
+                 STEP 1: Choose Role
+            ══════════════════════════════ -->
+            <div class="login-step active" id="step-1">
+                <div class="step-title">
+                    <h2>Welcome to HealthAI</h2>
+                    <p>Choose your role to continue</p>
+                </div>
+
+                <div class="role-grid">
+                    <div class="role-card" id="role-patient" data-role="patient"
+                         style="--role-color:#2563EB;--role-bg:rgba(37,99,235,0.12)"
+                         onclick="selectRole('patient')" tabindex="0" aria-label="Patient role">
+                        <div class="role-icon"><i class="fas fa-user"></i></div>
+                        <div class="role-label">Patient</div>
+                        <div class="role-desc">Book ambulance, AI triage, Med ID</div>
+                    </div>
+                    <div class="role-card" id="role-doctor" data-role="doctor"
+                         style="--role-color:#14B8A6;--role-bg:rgba(20,184,166,0.12)"
+                         onclick="selectRole('doctor')" tabindex="0" aria-label="Doctor role">
+                        <div class="role-icon"><i class="fas fa-user-md"></i></div>
+                        <div class="role-label">Doctor</div>
+                        <div class="role-desc">Manage schedule, emergency alerts</div>
+                    </div>
+                    <div class="role-card" id="role-hospital" data-role="hospital"
+                         style="--role-color:#F97316;--role-bg:rgba(249,115,22,0.12)"
+                         onclick="selectRole('hospital')" tabindex="0" aria-label="Hospital Admin role">
+                        <div class="role-icon"><i class="fas fa-hospital"></i></div>
+                        <div class="role-label">Hospital Admin</div>
+                        <div class="role-desc">Beds, ICU, resource management</div>
+                    </div>
+                    <div class="role-card" id="role-admin" data-role="admin"
+                         style="--role-color:#8B5CF6;--role-bg:rgba(139,92,246,0.12)"
+                         onclick="selectRole('admin')" tabindex="0" aria-label="System Admin role">
+                        <div class="role-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="role-label">System Admin</div>
+                        <div class="role-desc">Network-wide oversight & AI insights</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════
+                 STEP 2: Login / Register
+            ══════════════════════════════ -->
+            <div class="login-step" id="step-2">
+
+                <!-- Back -->
+                <button class="btn-back" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+
+                <!-- Selected Role Badge -->
+                <div class="selected-role-badge" id="role-badge">
+                    <div class="badge-dot" id="badge-dot" style="background:#2563EB"></div>
+                    <span id="badge-label">Patient</span>
+                </div>
+
+                <!-- Auth Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+                    <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+                </div>
+
+                <!-- Error message -->
+                <div class="form-message" id="form-msg"></div>
+
+                <!-- ── LOGIN FORM ── -->
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                            <input type="email" class="form-input" id="login-email"
+                                   placeholder="your@email.com" autocomplete="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <input type="password" class="form-input" id="login-password"
+                                   placeholder="Enter your password" autocomplete="current-password" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('login-password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-divider">or use demo credentials</div>
+
+                    <button type="button" class="demo-fill-btn" id="demo-btn" onclick="fillDemo()">
+                        <i class="fas fa-magic"></i> Auto-fill Demo Account
+                    </button>
+
+                    <br><br>
+                    <button type="submit" class="btn-submit" id="login-submit-btn">
+                        <span class="spinner" id="login-spinner"></span>
+                        <span id="login-btn-text"><i class="fas fa-sign-in-alt"></i> Sign In</span>
+                    </button>
+                </form>
+
+                <!-- ── REGISTER FORMS (role-specific) ── -->
+
+                <!-- Patient Register -->
+                <form id="register-form-patient" class="register-form" onsubmit="handleRegister(event)" style="display:none">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" id="r-p-fname" placeholder="Arjun" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" id="r-p-lname" placeholder="Sharma" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                            <input type="email" class="form-input" id="r-p-email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-phone form-input-icon"></i>
+                            <input type="tel" class="form-input" id="r-p-phone" placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-input" id="r-p-dob">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Blood Group</label>
+                            <select class="form-input" id="r-p-blood">
+                                <option value="">Select</option>
+                                <option>A+</option><option>A−</option>
+                                <option>B+</option><option>B−</option>
+                                <option>O+</option><option>O−</option>
+                                <option>AB+</option><option>AB−</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <input type="password" class="form-input" id="r-p-pw" placeholder="Create a password" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('r-p-pw', this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="r-p-terms" required>
+                        <label for="r-p-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit" class="btn-submit role-patient">
+                        <i class="fas fa-user-plus"></i> Create Patient Account
+                    </button>
+                </form>
+
+                <!-- Doctor Register -->
+                <form id="register-form-doctor" class="register-form" onsubmit="handleRegister(event)" style="display:none">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" id="r-d-fname" placeholder="Rajesh" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" id="r-d-lname" placeholder="Sharma" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                            <input type="email" class="form-input" id="r-d-email" placeholder="dr.your@hospital.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Specialization</label>
+                        <select class="form-input" id="r-d-spec" required>
+                            <option value="">Choose specialization</option>
+                            <option>Cardiologist</option><option>Neurologist</option>
+                            <option>Orthopedic</option><option>Pediatrician</option>
+                            <option>General Surgeon</option><option>Emergency Medicine</option>
+                            <option>Anesthesiologist</option><option>Pulmonologist</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Medical License ID</label>
+                            <input type="text" class="form-input" id="r-d-license" placeholder="MCI-12345" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Experience (yrs)</label>
+                            <input type="number" class="form-input" id="r-d-exp" placeholder="12" min="0" max="60">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Affiliated Hospital</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-hospital form-input-icon"></i>
+                            <input type="text" class="form-input" id="r-d-hospital" placeholder="City General Hospital">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <input type="password" class="form-input" id="r-d-pw" placeholder="Create a password" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('r-d-pw', this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit role-doctor">
+                        <i class="fas fa-user-md"></i> Create Doctor Account
+                    </button>
+                </form>
+
+                <!-- Hospital Admin Register -->
+                <form id="register-form-hospital" class="register-form" onsubmit="handleRegister(event)" style="display:none">
+                    <div class="form-group">
+                        <label class="form-label">Administrator Name</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-user form-input-icon"></i>
+                            <input type="text" class="form-input" id="r-h-name" placeholder="Dr. Anjali Rao" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                            <input type="email" class="form-input" id="r-h-email" placeholder="admin@hospital.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hospital Name</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-hospital form-input-icon"></i>
+                            <input type="text" class="form-input" id="r-h-hospital" placeholder="City General Hospital" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-input" id="r-h-city" placeholder="Noida">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bed Capacity</label>
+                            <input type="number" class="form-input" id="r-h-beds" placeholder="500" min="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Admin Authorization Code</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-key form-input-icon"></i>
+                            <input type="text" class="form-input" id="r-h-code" placeholder="HAI-HOSP-XXXX" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <input type="password" class="form-input" id="r-h-pw" placeholder="Create a password" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('r-h-pw', this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit role-hospital">
+                        <i class="fas fa-hospital"></i> Register Hospital Admin
+                    </button>
+                </form>
+
+                <!-- System Admin Register -->
+                <form id="register-form-admin" class="register-form" onsubmit="handleRegister(event)" style="display:none">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-user-shield form-input-icon"></i>
+                            <input type="text" class="form-input" id="r-a-name" placeholder="Sunil Arora" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                            <input type="email" class="form-input" id="r-a-email" placeholder="sysadmin@healthai.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">System Admin Key</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-shield-alt form-input-icon"></i>
+                            <input type="password" class="form-input" id="r-a-key" placeholder="HAI-SYS-ADMIN-KEY" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('r-a-key', this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <input type="password" class="form-input" id="r-a-pw" placeholder="Create a password" required>
+                            <button type="button" class="pw-toggle" onclick="togglePw('r-a-pw', this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit role-admin">
+                        <i class="fas fa-shield-alt"></i> Create Admin Account
+                    </button>
+                </form>
+
+            </div>
+            <!-- end step-2 -->
+
+        </div>
+        <!-- end .login-card -->
+
+        <div class="login-footer">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            &nbsp;·&nbsp; &copy; 2025 HealthAI — Google Solution Challenge
+        </div>
+
+    </div><!-- end .login-wrapper -->
+
+    <script src="auth.js"></script>
+    <script>
+        // ── Demo Credentials per role ──
+        const DEMO_CREDS = {
+            patient:  { email: 'patient@healthai.com',  password: 'demo123', name: 'Arjun Sharma' },
+            doctor:   { email: 'doctor@healthai.com',   password: 'demo123', name: 'Dr. Rajesh Sharma' },
+            hospital: { email: 'hospital@healthai.com', password: 'demo123', name: 'Dr. Anjali Rao' },
+            admin:    { email: 'admin@healthai.com',    password: 'demo123', name: 'Sunil Arora' },
+        };
+
+        const ROLE_META = {
+            patient:  { label: 'Patient',        color: '#2563EB',  icon: 'fa-user' },
+            doctor:   { label: 'Doctor',          color: '#14B8A6',  icon: 'fa-user-md' },
+            hospital: { label: 'Hospital Admin',  color: '#F97316',  icon: 'fa-hospital' },
+            admin:    { label: 'System Admin',    color: '#8B5CF6',  icon: 'fa-shield-alt' },
+        };
+
+        let currentRole = null;
+        let currentTab  = 'login';
+
+        // Redirect if already logged in
+        if (HealthAIAuth.isLoggedIn()) {
+            const u = HealthAIAuth.getUser();
+            window.location.href = HealthAIAuth.getDashboard(u.role);
+        }
+
+        function selectRole(role) {
+            currentRole = role;
+            // Update card selection states
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('role-' + role).classList.add('selected');
+
+            // Small delay for visual feedback
+            setTimeout(() => goToStep2(role), 240);
+        }
+
+        function goToStep2(role) {
+            // Update step indicators
+            document.getElementById('dot-1').classList.remove('active');
+            document.getElementById('dot-1').classList.add('done');
+            document.getElementById('dot-2').classList.add('active');
+
+            // Show badge
+            const meta = ROLE_META[role];
+            document.getElementById('badge-dot').style.background = meta.color;
+            document.getElementById('badge-label').innerHTML = `<i class="fas ${meta.icon}"></i> &nbsp;${meta.label}`;
+
+            // Update submit button color class
+            const subBtn = document.getElementById('login-submit-btn');
+            subBtn.className = 'btn-submit role-' + role;
+
+            // Switch steps
+            document.getElementById('step-1').classList.remove('active');
+            document.getElementById('step-2').classList.add('active');
+
+            // Show correct register form
+            showRegisterForm(role);
+            switchTab(currentTab); // restore last tab
+        }
+
+        function goBack() {
+            document.getElementById('dot-1').classList.add('active');
+            document.getElementById('dot-1').classList.remove('done');
+            document.getElementById('dot-2').classList.remove('active');
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-1').classList.add('active');
+            clearMsg();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const loginForm = document.getElementById('login-form');
+            const regFormId = 'register-form-' + currentRole;
+            const regForm  = document.getElementById(regFormId);
+
+            const tabLogin    = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+
+            if (tab === 'login') {
+                loginForm.style.display = '';
+                if (regForm) regForm.style.display = 'none';
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+            } else {
+                loginForm.style.display = 'none';
+                if (regForm) regForm.style.display = '';
+                tabLogin.classList.remove('active');
+                tabRegister.classList.add('active');
+            }
+            clearMsg();
+        }
+
+        function showRegisterForm(role) {
+            document.querySelectorAll('.register-form').forEach(f => f.style.display = 'none');
+        }
+
+        function fillDemo() {
+            const creds = DEMO_CREDS[currentRole];
+            if (!creds) return;
+            document.getElementById('login-email').value    = creds.email;
+            document.getElementById('login-password').value = creds.password;
+            // Animate
+            const btn = document.getElementById('demo-btn');
+            btn.innerHTML = '<i class="fas fa-check"></i> Demo credentials filled!';
+            btn.style.color = '#86EFAC';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-magic"></i> Auto-fill Demo Account';
+                btn.style.color = '';
+            }, 2000);
+        }
+
+        function togglePw(inputId, btn) {
+            const inp = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                inp.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        function showMsg(text, type = 'error') {
+            const el = document.getElementById('form-msg');
+            el.textContent = text;
+            el.className = 'form-message ' + type;
+        }
+        function clearMsg() {
+            const el = document.getElementById('form-msg');
+            el.textContent = '';
+            el.className = 'form-message';
+        }
+
+        function setLoading(on) {
+            const btn  = document.getElementById('login-submit-btn');
+            const spin = document.getElementById('login-spinner');
+            const txt  = document.getElementById('login-btn-text');
+            btn.disabled = on;
+            spin.style.display = on ? 'block' : 'none';
+            txt.style.display  = on ? 'none' : 'flex';
+        }
+
+        // ── Handle Login ──
+        function handleLogin(e) {
+            e.preventDefault();
+            clearMsg();
+            const email = document.getElementById('login-email').value.trim();
+            const pw    = document.getElementById('login-password').value;
+
+            if (!email || !pw) { showMsg('Please fill in all fields.'); return; }
+
+            setLoading(true);
+
+            // Simulate async auth check
+            setTimeout(() => {
+                setLoading(false);
+                const demo = DEMO_CREDS[currentRole];
+
+                // Accept demo credentials OR any email+password for demo purposes
+                if (email === demo.email && pw === demo.password) {
+                    // Exact demo match
+                    loginSuccess(demo.name, email);
+                } else if (pw.length >= 6) {
+                    // Accept any email with 6+ char password (demo mode)
+                    const name = email.split('@')[0].replace(/[._]/g, ' ')
+                        .replace(/\b\w/g, c => c.toUpperCase());
+                    loginSuccess(name, email);
+                } else {
+                    showMsg('Invalid credentials. Try the demo auto-fill button.');
+                }
+            }, 900);
+        }
+
+        function loginSuccess(name, email) {
+            HealthAIAuth.setUser(currentRole, name, email);
+            showMsg('✓ Login successful! Redirecting…', 'success');
+            setTimeout(() => {
+                window.location.href = HealthAIAuth.getDashboard(currentRole);
+            }, 800);
+        }
+
+        // ── Handle Register ──
+        function handleRegister(e) {
+            e.preventDefault();
+            clearMsg();
+
+            let name = '', email = '';
+            switch (currentRole) {
+                case 'patient':
+                    name  = `${document.getElementById('r-p-fname').value} ${document.getElementById('r-p-lname').value}`.trim();
+                    email = document.getElementById('r-p-email').value.trim();
+                    break;
+                case 'doctor':
+                    name  = `Dr. ${document.getElementById('r-d-fname').value} ${document.getElementById('r-d-lname').value}`.trim();
+                    email = document.getElementById('r-d-email').value.trim();
+                    break;
+                case 'hospital':
+                    name  = document.getElementById('r-h-name').value.trim();
+                    email = document.getElementById('r-h-email').value.trim();
+                    break;
+                case 'admin':
+                    name  = document.getElementById('r-a-name').value.trim();
+                    email = document.getElementById('r-a-email').value.trim();
+                    break;
+            }
+            if (!name || !email) { showMsg('Please complete all required fields.'); return; }
+
+            showMsg('✓ Account created! Signing you in…', 'success');
+            setTimeout(() => {
+                HealthAIAuth.setUser(currentRole, name, email);
+                window.location.href = HealthAIAuth.getDashboard(currentRole);
+            }, 1000);
+        }
+
+        // Keyboard support for role cards
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthAI | Emergency Request</title>
+    <meta name="description" content="Request emergency ambulance dispatch with AI-powered severity assessment.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="patient.css">
+    <link rel="stylesheet" href="emergency.css">
+</head>
+
+<body class="patient-app emergency-page">
+
+    <!-- Top Bar -->
+    <div class="app-topbar emergency-topbar">
+        <a href="#" onclick="history.back(); return false;" class="back-btn back-light">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="app-title light">
+            <i class="fas fa-ambulance"></i>
+            Emergency Request
+        </div>
+        <div class="emergency-pulse-dot"></div>
+    </div>
+
+    <main class="app-main" id="emergency-main">
+
+        <!-- Status Steps -->
+        <div class="form-steps">
+            <div class="form-step active" id="fstep-1">
+                <div class="step-dot active">1</div>
+                <span>Type</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="form-step" id="fstep-2">
+                <div class="step-dot">2</div>
+                <span>Severity</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="form-step" id="fstep-3">
+                <div class="step-dot">3</div>
+                <span>Details</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="form-step" id="fstep-4">
+                <div class="step-dot">4</div>
+                <span>Confirm</span>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form class="emergency-form" id="emergency-form">
+
+            <!-- Step 1: Emergency Type -->
+            <div class="form-panel active" id="panel-1">
+                <div class="panel-header">
+                    <div class="panel-icon red">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div>
+                        <h3>Emergency Type</h3>
+                        <p>Select the type of emergency</p>
+                    </div>
+                </div>
+                <div class="emergency-types">
+                    <label class="etype-card selected" id="etype-accident">
+                        <input type="radio" name="emergency_type" value="accident" checked>
+                        <div class="etype-icon">
+                            <i class="fas fa-car-crash"></i>
+                        </div>
+                        <span>Accident</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                    <label class="etype-card" id="etype-cardiac">
+                        <input type="radio" name="emergency_type" value="cardiac">
+                        <div class="etype-icon red">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <span>Cardiac</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                    <label class="etype-card" id="etype-stroke">
+                        <input type="radio" name="emergency_type" value="stroke">
+                        <div class="etype-icon purple">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span>Stroke</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                    <label class="etype-card" id="etype-breathing">
+                        <input type="radio" name="emergency_type" value="breathing">
+                        <div class="etype-icon teal">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                        <span>Breathing</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                    <label class="etype-card" id="etype-trauma">
+                        <input type="radio" name="emergency_type" value="trauma">
+                        <div class="etype-icon orange">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <span>Trauma</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                    <label class="etype-card" id="etype-other">
+                        <input type="radio" name="emergency_type" value="other">
+                        <div class="etype-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <span>Other</span>
+                        <div class="etype-check"><i class="fas fa-check"></i></div>
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary btn-block btn-lg" id="next-1" onclick="nextStep(1)">
+                    Next: Severity Level <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Step 2: Severity Level -->
+            <div class="form-panel" id="panel-2">
+                <div class="panel-header">
+                    <div class="panel-icon orange">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div>
+                        <h3>Severity Level</h3>
+                        <p>How critical is the situation?</p>
+                    </div>
+                </div>
+                <div class="severity-levels">
+                    <label class="severity-card low" id="sev-low">
+                        <input type="radio" name="severity" value="low">
+                        <div class="severity-indicator"></div>
+                        <div class="severity-content">
+                            <h4>Low</h4>
+                            <p>Stable, no immediate danger</p>
+                        </div>
+                        <div class="severity-badge">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                    </label>
+                    <label class="severity-card medium selected" id="sev-medium">
+                        <input type="radio" name="severity" value="medium" checked>
+                        <div class="severity-indicator"></div>
+                        <div class="severity-content">
+                            <h4>Medium</h4>
+                            <p>Needs attention soon</p>
+                        </div>
+                        <div class="severity-badge">
+                            <i class="fas fa-meh"></i>
+                        </div>
+                    </label>
+                    <label class="severity-card high" id="sev-high">
+                        <input type="radio" name="severity" value="high">
+                        <div class="severity-indicator"></div>
+                        <div class="severity-content">
+                            <h4>High / Critical</h4>
+                            <p>Life-threatening, urgent care needed</p>
+                        </div>
+                        <div class="severity-badge">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                    </label>
+                </div>
+                <div class="nav-btns">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(2)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Patient Details -->
+            <div class="form-panel" id="panel-3">
+                <div class="panel-header">
+                    <div class="panel-icon teal">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h3>Patient Details</h3>
+                        <p>Help us provide better care</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" placeholder="Full name" id="patient-name"
+                            value="Arjun Sharma">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" class="form-control" placeholder="Age" id="patient-age" value="28" min="0"
+                            max="120">
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Group</label>
+                        <select class="form-control" id="blood-group">
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option selected>O+</option>
+                            <option>O-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX" id="contact-num"
+                            value="+91 98765 43210">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Known Allergies / Conditions <span
+                            style="color:var(--text-muted);font-weight:400">(Optional)</span></label>
+                    <textarea class="form-control" rows="2" placeholder="e.g., Penicillin allergy, Diabetic..."
+                        id="conditions"></textarea>
+                </div>
+                <div class="location-aware">
+                    <div class="location-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="location-text">
+                        <span>Location Auto-Detected</span>
+                        <small>Sector 12, Noida, UP — GPS Locked</small>
+                    </div>
+                    <span class="badge badge-success">✓ Found</span>
+                </div>
+                <div class="nav-btns">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(3)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                        Review <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Confirm & Dispatch -->
+            <div class="form-panel" id="panel-4">
+                <div class="panel-header">
+                    <div class="panel-icon red">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <div>
+                        <h3>Confirm & Dispatch</h3>
+                        <p>Review before requesting ambulance</p>
+                    </div>
+                </div>
+
+                <!-- Ambulance Visual -->
+                <div class="ambulance-visual">
+                    <div class="amb-icon-wrap">
+                        <div class="amb-lights">
+                            <div class="amb-light left"></div>
+                            <div class="amb-light right"></div>
+                        </div>
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="dispatch-info">
+                        <h4>Nearest Ambulance Found</h4>
+                        <p>KA-01-Z-1234 · 1.2 km away</p>
+                        <span class="badge badge-success"><i class="fas fa-circle" style="font-size:0.4rem"></i>
+                            Paramedic on board</span>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="confirm-summary">
+                    <div class="summary-row">
+                        <span class="summary-label"><i class="fas fa-car-crash"></i> Emergency</span>
+                        <span class="summary-val" id="confirm-type">Accident</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label"><i class="fas fa-tachometer-alt"></i> Severity</span>
+                        <span class="summary-val"><span class="badge badge-warning"
+                                id="confirm-severity">Medium</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label"><i class="fas fa-user"></i> Patient</span>
+                        <span class="summary-val" id="confirm-name">Arjun Sharma, 28 · O+</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label"><i class="fas fa-hospital"></i> Hospital</span>
+                        <span class="summary-val">City General Hospital (1.2 km)</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label"><i class="fas fa-clock"></i> ETA</span>
+                        <span class="summary-val eta-val-bold">~4 minutes</span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-danger btn-block btn-lg dispatch-btn" id="dispatch-btn"
+                    onclick="dispatchAmbulance()">
+                    <i class="fas fa-ambulance"></i>
+                    Request Ambulance Now
+                </button>
+                <button type="button" class="btn btn-outline btn-block" onclick="prevStep(4)">
+                    <i class="fas fa-arrow-left"></i> Edit Details
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Success Screen (Hidden) -->
+        <div class="success-screen" id="success-screen" style="display:none">
+            <div class="success-animation">
+                <div class="success-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+            <h2>Ambulance Dispatched!</h2>
+            <p>Help is on the way. Stay calm and remain at your location.</p>
+            <div class="dispatch-card">
+                <div class="dispatch-row">
+                    <i class="fas fa-ambulance" style="color:var(--primary)"></i>
+                    <div>
+                        <strong>KA-01-Z-1234</strong>
+                        <span>Driver: Rajan Kumar</span>
+                    </div>
+                </div>
+                <div class="dispatch-eta-row">
+                    <div class="dispatch-eta">
+                        <span class="big-eta">4</span>
+                        <span>min ETA</span>
+                    </div>
+                    <div class="dispatch-eta">
+                        <span class="big-eta">1.2</span>
+                        <span>km away</span>
+                    </div>
+                </div>
+            </div>
+            <a href="tracking.html" class="btn btn-primary btn-block btn-lg" id="track-now-btn">
+                <i class="fas fa-map-marker-alt"></i>
+                Track Live
+            </a>
+            <a href="patient.html" class="btn btn-outline btn-block" id="back-home-btn" style="margin-top:10px">
+                Back to Home
+            </a>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            HealthAIAuth.guardPage(['patient']);
+            const usr = HealthAIAuth.getUser();
+            if (usr && usr.name) {
+                const nameInput = document.getElementById('patient-name');
+                if (nameInput) nameInput.value = usr.name;
+            }
+        });
+
+        function nextStep(step) {
+            document.getElementById(`panel-${step}`).classList.remove('active');
+            document.getElementById(`fstep-${step}`).classList.remove('active');
+            document.getElementById(`fstep-${step}`).classList.add('done');
+
+            currentStep = step + 1;
+            document.getElementById(`panel-${currentStep}`).classList.add('active');
+            document.getElementById(`fstep-${currentStep}`).classList.add('active');
+
+            if (currentStep === 4) updateConfirmSummary();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep(step) {
+            document.getElementById(`panel-${step}`).classList.remove('active');
+            document.getElementById(`fstep-${step}`).classList.remove('active');
+
+            currentStep = step - 1;
+            document.getElementById(`fstep-${currentStep}`).classList.remove('done');
+            document.getElementById(`fstep-${currentStep}`).classList.add('active');
+            document.getElementById(`panel-${currentStep}`).classList.add('active');
+        }
+
+        function updateConfirmSummary() {
+            const type = document.querySelector('input[name="emergency_type"]:checked')?.value || 'Accident';
+            const severity = document.querySelector('input[name="severity"]:checked')?.value || 'Medium';
+            const name = document.getElementById('patient-name')?.value || '';
+            const age = document.getElementById('patient-age')?.value || '';
+            const bg = document.getElementById('blood-group')?.value || '';
+
+            document.getElementById('confirm-type').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById('confirm-severity').textContent = severity.charAt(0).toUpperCase() + severity.slice(1);
+            document.getElementById('confirm-name').textContent = `${name}, ${age} · ${bg}`;
+        }
+
+        function dispatchAmbulance() {
+            const btn = document.getElementById('dispatch-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner-inline"></div> Dispatching...';
+            setTimeout(() => {
+                document.getElementById('emergency-form').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+                document.querySelector('.form-steps').style.display = 'none';
+            }, 2000);
+        }
+
+        // Severity card selection
+        document.querySelectorAll('.severity-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.severity-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        });
+
+        // Emergency type selection
+        document.querySelectorAll('.etype-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.etype-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+
+</html>
