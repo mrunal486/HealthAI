@@ -1,0 +1,8 @@
+# Config files with sensitive API keys
+config.js
+
+# Dependency directories
+node_modules/
+
+# Firebase hosting cache
+.firebase/
