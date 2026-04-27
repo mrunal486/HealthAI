@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="landing.css">
     <link rel="stylesheet" href="mobile.css">
+    <script src="theme.js"></script>
 </head>
 
 <body>
@@ -32,6 +33,9 @@
                 <a href="#about" class="nav-link">About</a>
             </div>
             <div class="nav-actions" id="nav-actions">
+                <button class="icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <i class="fas fa-moon theme-icon-indicator"></i>
+                </button>
                 <!-- Filled dynamically by auth.js -->
                 <a href="login.html" class="btn btn-primary" id="nav-login-btn">
                     <i class="fas fa-sign-in-alt"></i> Login

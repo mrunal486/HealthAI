@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="patient.css">
     <link rel="stylesheet" href="coming-soon.css">
+    <script src="theme.js"></script>
     <script src="config.js"></script>
     <script src="data.js"></script>
 </head>
@@ -27,9 +28,14 @@
             <span class="brand-dot"></span>
             HealthAI
         </div>
-        <button class="app-icon-btn" id="profile-btn" aria-label="Logout" onclick="HealthAIAuth.logout()">
-            <i class="fas fa-sign-out-alt"></i>
-        </button>
+        <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
+            <button class="app-icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                <i class="fas fa-moon theme-icon-indicator"></i>
+            </button>
+            <button class="app-icon-btn" id="profile-btn" aria-label="Logout" onclick="HealthAIAuth.logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
     </div>
 
     <!-- App Content -->

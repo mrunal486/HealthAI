@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="mobile.css">
     <link rel="stylesheet" href="coming-soon.css">
+    <script src="theme.js"></script>
 </head>
 
 <body>
@@ -71,6 +72,9 @@
                         <button class="btn btn-sm" id="toggle-status-btn" onclick="toggleStatus()"
                             style="background:var(--success-bg);color:var(--success);border:none">Toggle</button>
                     </div>
+                    <button class="icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                        <i class="fas fa-moon theme-icon-indicator"></i>
+                    </button>
                     <button class="icon-btn alert-btn" aria-label="Notifications">
                         <i class="fas fa-bell"></i>
                         <div class="notif-dot"></div>

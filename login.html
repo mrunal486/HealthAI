@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="login.css">
+    <script src="theme.js"></script>
 </head>
 <body>
 
@@ -19,6 +20,12 @@
     </div>
 
     <div class="login-wrapper">
+
+        <div style="position:absolute; top: 20px; right: 20px; z-index: 10;">
+            <button class="icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                <i class="fas fa-moon theme-icon-indicator"></i>
+            </button>
+        </div>
 
         <!-- Brand -->
         <div class="login-brand">
